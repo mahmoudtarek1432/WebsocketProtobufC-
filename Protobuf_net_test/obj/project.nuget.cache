@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "8Y9Qp4VZSMCVGZ6gMlBnSRow4fWK8o9yzaYpOo+vsbSe0o0iF08E3iRZSYdPcKsnakTEVlYxDGPY6XoMwCVAeg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\mahmoud_tarek\\source\\repos\\Protobuf_net_test\\Protobuf_net_test\\Protobuf_net_test.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\mahmoud_tarek\\.nuget\\packages\\protobuf-net\\3.2.16\\protobuf-net.3.2.16.nupkg.sha512",
+    "C:\\Users\\mahmoud_tarek\\.nuget\\packages\\protobuf-net.core\\3.2.16\\protobuf-net.core.3.2.16.nupkg.sha512",
+    "C:\\Users\\mahmoud_tarek\\.nuget\\packages\\protobuf-net.reflection\\3.2.12\\protobuf-net.reflection.3.2.12.nupkg.sha512",
+    "C:\\Users\\mahmoud_tarek\\.nuget\\packages\\system.collections.immutable\\7.0.0\\system.collections.immutable.7.0.0.nupkg.sha512",
+    "C:\\Users\\mahmoud_tarek\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
