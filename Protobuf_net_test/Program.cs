@@ -36,6 +36,13 @@ newtypeBuilder.SetCustomAttribute(ctb);
 var withatt = newtypeBuilder.CreateType();
 var withattinstance = Activator.CreateInstance(withatt);
 
+withatt.GetProperties().ToList().ForEach(p =>
+{
+    var productProperty = typeof(ProductRequest).GetProperty(p.Name);
+    p.SetValue(withattinstance, productProperty.GetValue(product));
+    Console.WriteLine($"{p.Name}: {p.GetValue(withattinstance)}");
+});
+
 //byte[] data = new byte[5];
 using (var stream = new MemoryStream())
 {
