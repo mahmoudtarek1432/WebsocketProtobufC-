@@ -12,7 +12,6 @@ namespace ProtobufWebsocket.Websocket_Helper
     /** 
      class is responsible for instantiating and accepting websocket requests
      */
-    [HelpKeyword]
     public static class WebsocketBuilder
     {
         // use ws for insecure and wss for secure connection
