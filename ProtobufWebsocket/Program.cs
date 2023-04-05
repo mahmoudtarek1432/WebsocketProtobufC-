@@ -7,6 +7,7 @@ using ProtobufWebsocket.Attributes;
 using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.EndpointHelper;
 using ProtobufWebsocket.Model;
+using ProtobufWebsocket.Protobuf_Helper;
 using System.Reflection;
 
 Console.WriteLine("Hello, World!");
@@ -17,12 +18,7 @@ using IHost host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 }).Build();
 
 var a = Assembly.GetExecutingAssembly();
-var list = a.GetTypes().ToList();
-var classes = list.Where(t => t.IsClass == true).ToList();
-var x = classes.Where(t =>
-    t.GetCustomAttributes().Where(A => 
-    A.GetType().Name == "EndpointRequestAttribute").Count() > 0
-).ToList();
+ProtobufHelper.IntializeProtoEnvironment("endpoint",a);
 
 var module = ProtoAssemblyBuilder.DefineNewModule("endpoint");
 

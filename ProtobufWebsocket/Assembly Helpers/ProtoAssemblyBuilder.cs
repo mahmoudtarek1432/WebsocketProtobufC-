@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ProtobufWebsocket.Assembly_Helpers
 {
@@ -38,14 +34,12 @@ namespace ProtobufWebsocket.Assembly_Helpers
 
         public static TypeBuilder BuildTypeClone(ModuleBuilder mb, Type parent)
         {
-            return mb.DefineType(parent.Name,System.Reflection.TypeAttributes.Public,parent); //return a builder instance of a class that inherets from a type
+            return mb.DefineType(parent.Name, TypeAttributes.Public, parent); //return a builder instance of a class that inherets from a type
         }
 
         public static FieldBuilder CloneProperty(this TypeBuilder tb, PropertyInfo property)
         {
             return tb.DefineField(property.Name, property.PropertyType, FieldAttributes.Public);
         }
-
-       
     }
 }

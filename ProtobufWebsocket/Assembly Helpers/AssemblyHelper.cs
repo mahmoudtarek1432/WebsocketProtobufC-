@@ -12,5 +12,6 @@ namespace ProtobufWebsocket.Assembly_Helpers
         {
             return assembly.GetTypes();
         }
+
     }
 }
