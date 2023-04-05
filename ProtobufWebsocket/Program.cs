@@ -22,17 +22,19 @@ ProtobufHelper.IntializeProtoEnvironment("endpoint",a);
 
 var module = ProtoAssemblyBuilder.DefineNewModule("endpoint");
 
-
+/*
 var newtype =  EndpointFactory.ConvertIntoAnEndpoint((typeof(product), "r"), module).CreateType();
 var obj = Activator.CreateInstance(newtype);
-/*newtype.GetRuntimeProperties().ToList().ForEach(i => 
+newtype.GetRuntimeProperties().ToList().ForEach(i => 
 {
     i.SetValue(obj, null);
     Console.WriteLine(i.Name + "" + i.GetValue(obj));
 });
 newtype.GetRuntimeProperty("Name");
-*/
+
+
 
 var file = RuntimeTypeModel.Default.GetSchema(newtype, ProtoSyntax.Default);
 Console.WriteLine();
 
+*/

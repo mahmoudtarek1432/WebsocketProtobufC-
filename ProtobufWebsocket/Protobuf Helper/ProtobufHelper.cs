@@ -1,4 +1,5 @@
-﻿using ProtobufWebsocket.Assembly_Helpers;
+﻿using ProtoBuf.Meta;
+using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Attributes;
 using ProtobufWebsocket.EndpointHelper;
 using System;
@@ -29,9 +30,22 @@ namespace ProtobufWebsocket.Protobuf_Helper
 
             var IdentifiedEndpoints = endpoints.Select(EndpointFactory.identifyEndpoint).ToList(); //group endpoints with thier endpoint type
 
-            var EndpointBuilder = IdentifiedEndpoints.Select(E => EndpointFactory.ConvertIntoAnEndpoint(E, module));
+            var EndpointBuilder = IdentifiedEndpoints.Select(E => (EndpointFactory.ConvertIntoAnEndpoint(E, module), E.Item2) );
 
-            Console.WriteLine();
+            var createdTypes = EndpointBuilder.Select(Eb => (Eb.Item1.CreateType(), Eb.Item2));
+
+            var ReqEndpoint = EndpointFactory.CreateEnumerableContainer(module, createdTypes.Where(T => T.Item2 == "request")
+                                                                          .Select(T => T.Item1!),
+                                                                          "RequestEndpoint");
+            var ResEndpoint = EndpointFactory.CreateEnumerableContainer(module, createdTypes.Where(T => T.Item2 == "response")
+                                                                          .Select(T => T.Item1!),
+                                                                          "ResponseEndpoint");
+
+            var req = ReqEndpoint.CreateTypeInfo();
+            var res = ResEndpoint.CreateTypeInfo();
+
+            var proto1 = RuntimeTypeModel.Default.GetSchema(req, ProtoSyntax.Default);
+            //var proto2 = RuntimeTypeModel.Default.GetSchema(res, ProtoSyntax.Default);
         }
     }
 }

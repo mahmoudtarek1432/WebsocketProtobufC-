@@ -68,5 +68,17 @@ namespace ProtobufWebsocket.EndpointHelper
             }
             return (type, "response");
         }
+
+        public static TypeBuilder CreateEnumerableContainer(ModuleBuilder moduleBuilder, IEnumerable<Type> memberType, string name)
+        {
+            var endpoint = moduleBuilder.DefineType(name, TypeAttributes.Public);
+            foreach(var Type in memberType)
+            {
+                var arr = Array.CreateInstance(Type, 1);
+                endpoint.DefineField(Type.Name,arr.GetType(),FieldAttributes.Public);
+            }
+
+            return endpoint;
+        }
     }
 }
