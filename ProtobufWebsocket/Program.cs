@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProtobufWebsocket.Attributes;
 using ProtobufWebsocket.Dependency_Injection;
 using System.Reflection;
 
@@ -14,10 +15,8 @@ using IHost host = Host.CreateDefaultBuilder(args).ConfigureServices(services =>
 var a = Assembly.GetExecutingAssembly();
 var list = a.GetTypes().ToList();
 var classes = list.Where(t => t.IsClass == true).ToList();
-classes.ForEach(t =>
-{
-    t.GetCustomAttributes().ToList().ForEach(I =>
-    {
-        Console.WriteLine(t.Name + " " + I.GetType().Name);
-    });
-});
+var x = classes.Where(t =>
+    t.GetCustomAttributes().Where(A => 
+    A.GetType().Name == "EndpointRequestAttribute").Count() > 0
+).ToList();
+Console.WriteLine();

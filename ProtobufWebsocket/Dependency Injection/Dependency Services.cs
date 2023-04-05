@@ -13,7 +13,7 @@ namespace ProtobufWebsocket.Dependency_Injection
 
         public static void AddWebsocketDependencyInjection(this IServiceCollection services)
         {
-           // services.AddSingleton<IServerInstance,ServerInstance>();
+           services.AddSingleton<IServerInstance,ServerInstance>();
         }
     }
 }
