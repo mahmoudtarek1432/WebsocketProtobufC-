@@ -23,7 +23,7 @@ ProtobufHelper.IntializeProtoEnvironment("endpoint",a);
 var module = ProtoAssemblyBuilder.DefineNewModule("endpoint");
 
 
-var newtype =  EndpointFactory.ConvertIntoAnEndpoint(typeof(product), module).CreateType();
+var newtype =  EndpointFactory.ConvertIntoAnEndpoint((typeof(product), "r"), module).CreateType();
 var obj = Activator.CreateInstance(newtype);
 /*newtype.GetRuntimeProperties().ToList().ForEach(i => 
 {

@@ -1,5 +1,6 @@
 ﻿using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Attributes;
+using ProtobufWebsocket.EndpointHelper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,12 @@ namespace ProtobufWebsocket.Protobuf_Helper
                 A.GetType().Name == typeof(EndpointRequestAttribute).Name
                 || A.GetType().Name == typeof(EndpointResponseAttribute).Name)
                 .Count() > 0).ToList();
-            var x = " ";
+
+            var IdentifiedEndpoints = endpoints.Select(EndpointFactory.identifyEndpoint).ToList(); //group endpoints with thier endpoint type
+
+            var EndpointBuilder = IdentifiedEndpoints.Select(E => EndpointFactory.ConvertIntoAnEndpoint(E, module));
+
+            Console.WriteLine();
         }
     }
 }
