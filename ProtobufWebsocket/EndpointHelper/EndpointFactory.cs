@@ -13,7 +13,7 @@ namespace ProtobufWebsocket.EndpointHelper
 {
     internal class EndpointFactory
     {
-        public static void ConvertIntoAnEndpoint(Type baseType, ModuleBuilder module)
+        public static TypeBuilder ConvertIntoAnEndpoint(Type baseType, ModuleBuilder module)
         {
             //build a clone of a type into a new module
             var typebuilder = module.DefineType(baseType.Name, System.Reflection.TypeAttributes.Public); //defined a type with the same namespace 
@@ -27,20 +27,21 @@ namespace ProtobufWebsocket.EndpointHelper
                 int index = 1;
                 foreach (var property in properties)
                 {              
-                    var PropertyBuilder = property.CloneProperty(typebuilder);
-                    decoratePropertiesWithProtoMember(PropertyBuilder, index++);
+                    var fieldBuilder = typebuilder.CloneProperty(property);
+                    
+                    decoratePropertiesWithProtoMember(fieldBuilder, index++);
+                   
                 }
-
-                //properties now are members
-
-
+                //properties now are ProtoMembers
             }
+            return typebuilder;
         }
 
-        private static void decoratePropertiesWithProtoMember(PropertyBuilder property, int tag)
+        private static void decoratePropertiesWithProtoMember(FieldBuilder field, int tag)
         {
             var member = ProtoAssemblyBuilder.DecorateType<ProtoMemberAttribute>(new Type[] { typeof(int) }, new object[] { tag });
-            property.SetCustomAttribute(member);
+            field.SetCustomAttribute(member);
+
         }
     }
 }

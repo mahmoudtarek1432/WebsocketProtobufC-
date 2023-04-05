@@ -31,9 +31,8 @@ namespace ProtobufWebsocket.Assembly_Helpers
 
         public static CustomAttributeBuilder DecorateType<T>(Type[] typeConstructoArguments, object[] parameters)
         {
-            var emptyType = new Type[] { };
-            var AttrConstructor = typeof(T).GetConstructor(emptyType);
-            var attBuilder = new CustomAttributeBuilder(AttrConstructor, new object[] { });
+            var AttrConstructor = typeof(T).GetConstructor(typeConstructoArguments);
+            var attBuilder = new CustomAttributeBuilder(AttrConstructor, parameters);
             return attBuilder;
         }
 
@@ -42,9 +41,9 @@ namespace ProtobufWebsocket.Assembly_Helpers
             return mb.DefineType(parent.Name,System.Reflection.TypeAttributes.Public,parent); //return a builder instance of a class that inherets from a type
         }
 
-        public static PropertyBuilder CloneProperty(this PropertyInfo property, TypeBuilder tb)
+        public static FieldBuilder CloneProperty(this TypeBuilder tb, PropertyInfo property)
         {
-            return tb.DefineProperty(property.Name, property.Attributes, property.PropertyType,new Type[] { });
+            return tb.DefineField(property.Name, property.PropertyType, FieldAttributes.Public);
         }
 
        

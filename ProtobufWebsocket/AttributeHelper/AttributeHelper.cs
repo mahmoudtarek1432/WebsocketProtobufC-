@@ -8,5 +8,6 @@ namespace ProtobufWebsocket.AttributeHelper
 {
     internal class AttributeHelper
     {
+        
     }
 }
