@@ -15,7 +15,7 @@ namespace ProtobufWebsocket.EndpointHelper
 {
     internal class EndpointFactory
     {
-        public static TypeBuilder ConvertIntoAnEndpoint((Type Class, string EndpointType) baseType, ModuleBuilder module)
+        public static TypeBuilder PrepareForProto((Type Class, string EndpointType) baseType, ModuleBuilder module)
         {
             TypeBuilder typebuilder = null;
             /*//build a clone of a type into a new module
@@ -40,9 +40,8 @@ namespace ProtobufWebsocket.EndpointHelper
                 foreach (var property in properties)
                 {              
                     var fieldBuilder = typebuilder.CloneProperty(property);
-                    
                     decoratePropertiesWithProtoMember(fieldBuilder, index++);
-                   
+                   //recursivly, if the member is not a primitive add a protocontract to the 
                 }
                 //properties now are ProtoMembers
             }
@@ -72,13 +71,27 @@ namespace ProtobufWebsocket.EndpointHelper
         public static TypeBuilder CreateEnumerableContainer(ModuleBuilder moduleBuilder, IEnumerable<Type> memberType, string name)
         {
             var endpoint = moduleBuilder.DefineType(name, TypeAttributes.Public);
+            var protoContract = ProtoAssemblyBuilder.DecorateType<ProtoContractAttribute>();
+            endpoint.SetCustomAttribute(protoContract);
+            int index = 1;
             foreach(var Type in memberType)
             {
                 var arr = Array.CreateInstance(Type, 1);
-                endpoint.DefineField(Type.Name,arr.GetType(),FieldAttributes.Public);
+                var fieldBuilder = endpoint.DefineField(Type.Name,arr.GetType(),FieldAttributes.Public);
+                decoratePropertiesWithProtoMember(fieldBuilder, index++);
+                
             }
 
             return endpoint;
+        }
+
+        public static void buildProtoField(TypeBuilder tb,PropertyInfo property,int index)
+        {
+            //recursivly, if the member is not a primitive prepare for protobuf 
+            //property.GetType().IsClass;
+            var fieldBuilder = tb.CloneProperty(property);
+            decoratePropertiesWithProtoMember(fieldBuilder, index);
+            
         }
     }
 }

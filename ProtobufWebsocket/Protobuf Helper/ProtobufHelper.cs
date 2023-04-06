@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace ProtobufWebsocket.Protobuf_Helper
     {
         public static void IntializeProtoEnvironment(string AssemblyName, Assembly assembly)
         {
-            
+
             var GlobalTypes = AssemblyHelper.loadAssemblyTypes(assembly); //loads all classes at excution time
             var module = ProtoAssemblyBuilder.DefineNewModule(AssemblyName);
 
@@ -28,24 +29,31 @@ namespace ProtobufWebsocket.Protobuf_Helper
                 || A.GetType().Name == typeof(EndpointResponseAttribute).Name)
                 .Count() > 0).ToList();
 
+            //list of tuple containing the type and a string of request or response
             var IdentifiedEndpoints = endpoints.Select(EndpointFactory.identifyEndpoint).ToList(); //group endpoints with thier endpoint type
 
-            var EndpointBuilder = IdentifiedEndpoints.Select(E => (EndpointFactory.ConvertIntoAnEndpoint(E, module), E.Item2) );
+            var EndpointBuilder = new List<(TypeBuilder, string)>();
+
+            //models mapped into endpoints by adding protocontract attribute and each member gets a protomember tag
+            IdentifiedEndpoints.ForEach(E => { EndpointBuilder.Add((EndpointFactory.PrepareForProto(E, module), E.Item2)); });
 
             var createdTypes = EndpointBuilder.Select(Eb => (Eb.Item1.CreateType(), Eb.Item2));
 
-            var ReqEndpoint = EndpointFactory.CreateEnumerableContainer(module, createdTypes.Where(T => T.Item2 == "request")
-                                                                          .Select(T => T.Item1!),
+            var reqTypes = createdTypes.Where(T => T.Item2 == "request").Select(T => T.Item1!).ToList();
+            var ReqEndpoint = EndpointFactory.CreateEnumerableContainer(module, reqTypes,
                                                                           "RequestEndpoint");
-            var ResEndpoint = EndpointFactory.CreateEnumerableContainer(module, createdTypes.Where(T => T.Item2 == "response")
-                                                                          .Select(T => T.Item1!),
+
+            var resTypes = createdTypes.Where(T => T.Item2 == "response").Select(T => T.Item1!).ToList();
+            var ResEndpoint = EndpointFactory.CreateEnumerableContainer(module, resTypes,
                                                                           "ResponseEndpoint");
 
-            var req = ReqEndpoint.CreateTypeInfo();
+            var req = ReqEndpoint.CreateType();
             var res = ResEndpoint.CreateTypeInfo();
 
             var proto1 = RuntimeTypeModel.Default.GetSchema(req, ProtoSyntax.Default);
-            //var proto2 = RuntimeTypeModel.Default.GetSchema(res, ProtoSyntax.Default);
+            var proto2 = RuntimeTypeModel.Default.GetSchema(res, ProtoSyntax.Default);
+            /*Console.WriteLine(proto1 + "\n");
+            Console.WriteLine(proto2);*/
         }
     }
 }
