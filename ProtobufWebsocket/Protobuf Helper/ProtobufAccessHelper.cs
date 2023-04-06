@@ -30,7 +30,13 @@ namespace ProtobufWebsocket.Protobuf_Helper
 
             var fields = responseEndpointType.GetRuntimeFields(); //includes lists of IResponses
 
-            
+            responseEndpointType.GetRuntimeFields().ToList().ForEach(field =>
+            {
+                if (field.FieldType.Name.Replace("[]", "") == serializableObject.GetType().Name) //fieldtype.name will return a string in the form of listtypename + []
+                {
+                    //activator when used on an array returns object of the inside list.
+                }
+            });
         }
     }
 }

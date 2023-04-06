@@ -48,7 +48,7 @@ var instance = Activator.CreateInstance(res);
 instance.GetType().GetRuntimeFields().ToList().ForEach(f =>
 {
     var obj = Activator.CreateInstance(f.FieldType);
-    f.SetValue(instance, obj); 
+    f.SetValue(instance, null); 
 });
 
 Console.WriteLine();
