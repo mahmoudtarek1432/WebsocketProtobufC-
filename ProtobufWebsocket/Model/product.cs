@@ -16,5 +16,7 @@ namespace ProtobufWebsocket.Model
         public decimal Price { get; set; }
 
         public String test { get; set; }
+
+        public int test2 { get; set; }
     }
 }

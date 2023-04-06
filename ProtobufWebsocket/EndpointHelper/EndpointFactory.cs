@@ -18,17 +18,8 @@ namespace ProtobufWebsocket.EndpointHelper
         public static TypeBuilder PrepareForProto((Type Class, string EndpointType) baseType, ModuleBuilder module)
         {
             TypeBuilder typebuilder = null;
-            /*//build a clone of a type into a new module
-             switch (baseType.EndpointType)
-             {
-                 case "request":
-                     typebuilder = module.DefineType(baseType.Class.Name, System.Reflection.TypeAttributes.Public,typeof(IRequest)); 
-                     break;
-                 case "resposne":
-                     typebuilder = module.DefineType(baseType.Class.Name, System.Reflection.TypeAttributes.Public,typeof(IResponse));
-                     break;
-             }*/
-            typebuilder = module.DefineType(baseType.Class.Name, System.Reflection.TypeAttributes.Public);
+
+            typebuilder = module.DefineType(baseType.Class.Name, TypeAttributes.Public);
             var contract = ProtoAssemblyBuilder.DecorateType<ProtoContractAttribute>();
             typebuilder.SetCustomAttribute(contract);
             //decorated the new class with protocontract 
@@ -39,7 +30,8 @@ namespace ProtobufWebsocket.EndpointHelper
                 int index = 1;
                 foreach (var property in properties)
                 {              
-                    var fieldBuilder = typebuilder.CloneProperty(property);
+                    var fieldType = buildProtoFieldType(module, property.PropertyType);
+                    var fieldBuilder = typebuilder.DefineField(property.Name, fieldType, FieldAttributes.Public);
                     decoratePropertiesWithProtoMember(fieldBuilder, index++);
                    //recursivly, if the member is not a primitive add a protocontract to the 
                 }
@@ -77,6 +69,7 @@ namespace ProtobufWebsocket.EndpointHelper
             foreach(var Type in memberType)
             {
                 var arr = Array.CreateInstance(Type, 1);
+                
                 var fieldBuilder = endpoint.DefineField(Type.Name,arr.GetType(),FieldAttributes.Public);
                 decoratePropertiesWithProtoMember(fieldBuilder, index++);
                 
@@ -85,13 +78,32 @@ namespace ProtobufWebsocket.EndpointHelper
             return endpoint;
         }
 
-        public static void buildProtoField(TypeBuilder tb,PropertyInfo property,int index)
+        //checks weather the type is a primitive or a class, in case of a class, recursivly prepares it for proto maping
+        public static Type buildProtoFieldType( ModuleBuilder mb,Type BasePropertyType)
         {
             //recursivly, if the member is not a primitive prepare for protobuf 
-            //property.GetType().IsClass;
-            var fieldBuilder = tb.CloneProperty(property);
-            decoratePropertiesWithProtoMember(fieldBuilder, index);
-            
+            if ((BasePropertyType.Name == "String"
+                || BasePropertyType.Name == "Object"
+                || BasePropertyType.Name == "Dynamic"
+                || !BasePropertyType.IsClass) == false) //is a created class
+            {
+                var checkt = PrepareForProto((BasePropertyType, ""), mb).CreateType(); //send the created type
+                return checkt;
+            }
+            else if (BasePropertyType.IsGenericType)//is a collection
+            {
+                if (BasePropertyType.isACollection())
+                {
+                    var GenericTypes = BasePropertyType.GetGenericArguments();
+                    foreach (var listType in GenericTypes)
+                    {
+                        return buildProtoFieldType(mb, listType); //used to create a new 
+                    }
+                }
+            }
+            return BasePropertyType; //the type is a primitive 
         }
+
+        
     }
 }

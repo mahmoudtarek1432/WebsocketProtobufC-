@@ -37,9 +37,22 @@ namespace ProtobufWebsocket.Assembly_Helpers
             return mb.DefineType(parent.Name, TypeAttributes.Public, parent); //return a builder instance of a class that inherets from a type
         }
 
-        public static FieldBuilder CloneProperty(this TypeBuilder tb, PropertyInfo property)
+        public static FieldBuilder ClonePropertyToField(this TypeBuilder tb, PropertyInfo property)
         {
             return tb.DefineField(property.Name, property.PropertyType, FieldAttributes.Public);
+        }
+
+        public static PropertyBuilder CloneProperty(this TypeBuilder tb, PropertyInfo property)
+        {
+            return tb.DefineProperty(property.Name, PropertyAttributes.None, property.PropertyType,new Type[] { });
+        }
+
+        public static bool isACollection(this Type type)
+        {
+            var definition = type.GetGenericTypeDefinition(); //access a generic type
+            var interfaces = definition.GetInterfaces();
+            return interfaces.Any(I => I.Name.Contains("IEnumerable")
+                                || I.Name.Contains("ICollection"));
         }
     }
 }

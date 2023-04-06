@@ -1,6 +1,7 @@
 ﻿using ProtoBuf.Meta;
 using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Attributes;
+using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.EndpointHelper;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using System.Xml.Linq;
 
 namespace ProtobufWebsocket.Protobuf_Helper
 {
-    public class ProtobufHelper
+    public class ProtobufCreationHelper
     {
         public static void IntializeProtoEnvironment(string AssemblyName, Assembly assembly)
         {
@@ -39,21 +40,34 @@ namespace ProtobufWebsocket.Protobuf_Helper
 
             var createdTypes = EndpointBuilder.Select(Eb => (Eb.Item1.CreateType(), Eb.Item2));
 
-            var reqTypes = createdTypes.Where(T => T.Item2 == "request").Select(T => T.Item1!).ToList();
-            var ReqEndpoint = EndpointFactory.CreateEnumerableContainer(module, reqTypes,
-                                                                          "RequestEndpoint");
+            var req = CreateRequestEndpoint(module, createdTypes);
+            var res = CreateResponseEndpoint(module, createdTypes);
 
-            var resTypes = createdTypes.Where(T => T.Item2 == "response").Select(T => T.Item1!).ToList();
-            var ResEndpoint = EndpointFactory.CreateEnumerableContainer(module, resTypes,
-                                                                          "ResponseEndpoint");
 
-            var req = ReqEndpoint.CreateType();
-            var res = ResEndpoint.CreateTypeInfo();
+            //appends them as singletons
+            EndpointsTypeProvider.CreateResponseEndpointSingleton(res);
+            EndpointsTypeProvider.CreateRequestEndpointSingleton(req);
 
             var proto1 = RuntimeTypeModel.Default.GetSchema(req, ProtoSyntax.Default);
             var proto2 = RuntimeTypeModel.Default.GetSchema(res, ProtoSyntax.Default);
-            /*Console.WriteLine(proto1 + "\n");
-            Console.WriteLine(proto2);*/
+
+            Console.WriteLine(proto1 + "\n");
+            Console.WriteLine(proto2);
+        }
+
+        public static Type CreateRequestEndpoint(ModuleBuilder mb, IEnumerable<(Type,string)> requests)
+        {
+            var reqTypes = requests.Where(T => T.Item2 == "request").Select(T => T.Item1!).ToList();
+            var endpointBuilder = EndpointFactory.CreateEnumerableContainer(mb, reqTypes,
+                                                                          "RequestEndpoint");
+            return endpointBuilder.CreateType();
+        }
+
+        public static Type CreateResponseEndpoint(ModuleBuilder mb, IEnumerable<(Type, string)> Responses)
+        {
+            var resTypes = Responses.Where(T => T.Item2 == "response").Select(T => T.Item1!).ToList();
+            var endpointBuilder = EndpointFactory.CreateEnumerableContainer(mb, resTypes, "ResponseEndpoint");
+            return endpointBuilder.CreateType();
         }
     }
 }
