@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProtobufWebsocket.Model
 {
-    internal abstract class IResponse
+    internal abstract class IResponse : ISerializable
     {
         public string? requestId { get; }
 

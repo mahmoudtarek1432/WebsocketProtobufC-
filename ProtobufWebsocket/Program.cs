@@ -36,7 +36,7 @@ newtype.GetRuntimeFields().ToList().ForEach(i =>
 
 
 
-
+var product = new ProductResponse() { Name = "name", Description = "desc", Price = 5 };
 
 var arr = Array.CreateInstance(newtype,5);
 var t = arr.GetType().Name.Replace("[]","");
@@ -47,8 +47,30 @@ var res = EndpointsTypeProvider.getResponseInstance();
 var instance = Activator.CreateInstance(res);
 instance.GetType().GetRuntimeFields().ToList().ForEach(f =>
 {
-    var obj = Activator.CreateInstance(f.FieldType);
-    f.SetValue(instance, null); 
+    var obj = Activator.CreateInstance(f.FieldType,new object[] {3});
+    var x = obj.GetType();/*.GetRuntimeFields().ToList().ForEach(O =>
+    {
+        var prop = product.GetType().GetProperty(O.Name);
+        O.SetValue(obj, prop.GetValue(product));
+    });*/
+    f.SetValue(instance, obj); 
 });
+
+var x = new ProductResponse[] {product, product , product };
+var s = x.GetType();
+var Arr = Activator.CreateInstance(s,new object[] {1});
+var num = RuntimeArrayHelpers.AppendObjectToRuntimeArray(x, product);
+var o = RuntimeArrayHelpers.extendRuntimeArray(x);
+
+var endpoint = ProtobufAccessHelper.fillEndpoint(product);
+var serialized = ProtobufAccessHelper.Encode(endpoint);
+
+
+using(MemoryStream ms = new MemoryStream(serialized))
+{
+    var de = ProtoBuf.Serializer.Deserialize(endpoint.GetType(), ms);
+    Console.WriteLine();
+}
+
 
 Console.WriteLine();
