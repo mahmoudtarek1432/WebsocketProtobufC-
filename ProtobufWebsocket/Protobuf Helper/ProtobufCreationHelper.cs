@@ -15,9 +15,9 @@ using System.Xml.Linq;
 
 namespace ProtobufWebsocket.Protobuf_Helper
 {
-    public class ProtobufCreationHelper
+    internal class ProtobufCreationHelper
     {
-        public static void IntializeProtoEnvironment(string AssemblyName, Assembly assembly)
+        internal static void IntializeProtoEnvironment(string AssemblyName, Assembly assembly)
         {
 
             var GlobalTypes = AssemblyHelper.loadAssemblyTypes(assembly); //loads all classes at excution time
@@ -55,7 +55,7 @@ namespace ProtobufWebsocket.Protobuf_Helper
             Console.WriteLine(proto2);
         }
 
-        public static Type CreateRequestEndpoint(ModuleBuilder mb, IEnumerable<(Type,string)> requests)
+        internal static Type CreateRequestEndpoint(ModuleBuilder mb, IEnumerable<(Type,string)> requests)
         {
             var reqTypes = requests.Where(T => T.Item2 == "request").Select(T => T.Item1!).ToList();
             var endpointBuilder = EndpointFactory.CreateEnumerableContainer(mb, reqTypes,
@@ -63,7 +63,7 @@ namespace ProtobufWebsocket.Protobuf_Helper
             return endpointBuilder.CreateType();
         }
 
-        public static Type CreateResponseEndpoint(ModuleBuilder mb, IEnumerable<(Type, string)> Responses)
+        internal static Type CreateResponseEndpoint(ModuleBuilder mb, IEnumerable<(Type, string)> Responses)
         {
             var resTypes = Responses.Where(T => T.Item2 == "response").Select(T => T.Item1!).ToList();
             var endpointBuilder = EndpointFactory.CreateEnumerableContainer(mb, resTypes, "ResponseEndpoint");

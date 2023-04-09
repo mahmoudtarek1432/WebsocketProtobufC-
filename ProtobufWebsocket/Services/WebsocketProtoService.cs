@@ -17,8 +17,10 @@ namespace ProtobufWebsocket.Services
         public static void AddProtoWebsocketService(this IServiceProvider Service, string address, System.Reflection.Assembly assembly)
         {
             //fetch for types accross the running code with attribute names given
-            
+            ProtobufCreationHelper.IntializeProtoEnvironment("endpoint", assembly);
 
+
+            //start protoservice
             var server = WebsocketBuilder.ConfigureServer(address);
             server.Start();
         }

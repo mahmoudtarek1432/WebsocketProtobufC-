@@ -19,7 +19,7 @@ namespace ProtobufWebsocket.Websocket_Helper
         public static WebSocketServer ConfigureServer(string Address)
         {
             if (string.IsNullOrEmpty(Address))
-                throw new ArgumentNullException("address");
+                throw new ArgumentNullException($"the passed address is empty or null {nameof(ConfigureServer)}");
 
             var server = ServerInstance.getServerInstance(Address);
             server.AddWebSocketService<ProtoWebsocketBehavior>("");
