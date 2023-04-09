@@ -19,10 +19,10 @@ namespace ProtobufWebsocket.Protobuf_Helper
     {
         internal static void IntializeProtoEnvironment(string AssemblyName, Assembly assembly)
         {
-
-            var GlobalTypes = AssemblyHelper.loadAssemblyTypes(assembly); //loads all classes at excution time
             var module = ProtoAssemblyBuilder.DefineNewModule(AssemblyName);
 
+            var GlobalTypes = AssemblyHelper.loadAssemblyTypes(assembly); //loads all classes at excution time
+            
             //retrieves all the assemblies consuming these attributes
             var endpoints = GlobalTypes.Where(t =>
                 t.GetCustomAttributes().Where(A =>
@@ -31,12 +31,12 @@ namespace ProtobufWebsocket.Protobuf_Helper
                 .Count() > 0).ToList();
 
             //list of tuple containing the type and a string of request or response
-            var IdentifiedEndpoints = endpoints.Select(EndpointFactory.identifyEndpoint).ToList(); //group endpoints with thier endpoint type
+            var IdentifiedEndpoints = endpoints.Select(Endpointbuilder.identifyEndpoint).ToList(); //group endpoints with thier endpoint type
 
             var EndpointBuilder = new List<(TypeBuilder, string)>();
 
             //models mapped into endpoints by adding protocontract attribute and each member gets a protomember tag
-            IdentifiedEndpoints.ForEach(E => { EndpointBuilder.Add((EndpointFactory.PrepareForProto(E, module), E.Item2)); });
+            IdentifiedEndpoints.ForEach(E => { EndpointBuilder.Add((Endpointbuilder.PrepareForProto(E, module), E.Item2)); });
 
             var createdTypes = EndpointBuilder.Select(Eb => (Eb.Item1.CreateType(), Eb.Item2));
 
@@ -58,7 +58,7 @@ namespace ProtobufWebsocket.Protobuf_Helper
         internal static Type CreateRequestEndpoint(ModuleBuilder mb, IEnumerable<(Type,string)> requests)
         {
             var reqTypes = requests.Where(T => T.Item2 == "request").Select(T => T.Item1!).ToList();
-            var endpointBuilder = EndpointFactory.CreateEnumerableContainer(mb, reqTypes,
+            var endpointBuilder = Endpointbuilder.CreateEnumerableContainer(mb, reqTypes,
                                                                           "RequestEndpoint");
             return endpointBuilder.CreateType();
         }
@@ -66,7 +66,7 @@ namespace ProtobufWebsocket.Protobuf_Helper
         internal static Type CreateResponseEndpoint(ModuleBuilder mb, IEnumerable<(Type, string)> Responses)
         {
             var resTypes = Responses.Where(T => T.Item2 == "response").Select(T => T.Item1!).ToList();
-            var endpointBuilder = EndpointFactory.CreateEnumerableContainer(mb, resTypes, "ResponseEndpoint");
+            var endpointBuilder = Endpointbuilder.CreateEnumerableContainer(mb, resTypes, "ResponseEndpoint");
             return endpointBuilder.CreateType();
         }
     }

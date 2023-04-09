@@ -1,4 +1,5 @@
-﻿using ProtobufWebsocket.Assembly_Helpers;
+﻿using ProtoBuf.Meta;
+using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.Model;
 using System;
@@ -21,6 +22,15 @@ namespace ProtobufWebsocket.Protobuf_Helper
                 bytes = ms.ToArray();
             }
             return bytes;
+        }
+
+        public static object Decode(Type type,byte[] bytes)
+        {
+            using (MemoryStream ms = new MemoryStream(bytes))
+            {
+                var decoded = ProtoBuf.Serializer.Deserialize(type, ms);
+                return decoded;
+            }
         }
 
 

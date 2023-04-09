@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace ProtobufWebsocket.Model
 {
-    internal abstract class IRequest : ISerializable
+    public abstract class IRequest : ISerializable
     {
         public int request_id { get; set; }
         public bool is_subscribe { get; set; }
-        public int methode_type { get; set; }
+        public MethodType methode_type { get; set; }
     }
 
     public enum MethodType

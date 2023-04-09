@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace ProtobufWebsocket.Model
 {
-    internal abstract class IResponse : ISerializable
+    public abstract class IResponse : ISerializable
     {
         public string? requestId { get; }
 
-        public bool? resultCode { get; set; }
+        public ResultCode? resultCode { get; set; }
 
         public IEnumerable<Error>? Errors { get; set; }
     }
 
-    enum ResultCode
+    public enum ResultCode
     {
         Success = 200,
         NotFound = 404,
