@@ -14,6 +14,7 @@ using ProtobufWebsocket.Services;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 
 var a = Assembly.GetExecutingAssembly();
 
@@ -21,6 +22,7 @@ var a = Assembly.GetExecutingAssembly();
 var product = new ProductResponse() { Name = "name", Description = "desc", Price = 5 };
 
 ProtobufCreationHelper.IntializeProtoEnvironment("endpoint", a);
+//EndpointHelper.PullEndpointThroughAssembly(a);
 
 var x = new ProductResponse[] {product, product , product };
 var s = x.GetType();
@@ -39,9 +41,12 @@ using(MemoryStream ms = new MemoryStream(serialized))
     Console.WriteLine();
 }
 
-var end = typeof(testendpoint);
+
+var end = typeof(ProtoEndpoint.Request<product>.WithResponse<ProductResponse>);
 
 var d = typeof(product).GetConstructors().First().GetParameters()[1].ParameterType;
+
+EndpointHelper.ResolveRequest(serialized);
 
 Console.WriteLine();
 

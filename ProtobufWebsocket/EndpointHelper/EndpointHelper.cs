@@ -3,12 +3,14 @@ using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Attributes;
 using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.Endpoint_Provider;
+using ProtobufWebsocket.Model;
 using ProtobufWebsocket.Protobuf_Helper;
 using ProtobufWebsocket.RequestMapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,25 +27,44 @@ namespace ProtobufWebsocket.EndpointHelper
                 t.GetInterfaces().ToList()
                 .Where( I => I.Name == typeof(IDynamicEndpoint).Name).Any());
 
+           foreach ( var handler in Handlers )
+            {
+                var Requesttype = handler.BaseType!.GetGenericArguments().Where(A => A.BaseType.Name == typeof(IRequest).Name).FirstOrDefault();
+                if (Requesttype != null)
+                {
+                    RequestMappingHelper.MapRequestToEndpoint(Requesttype!, handler);
+                }
+            }
+
             EndpointsHandleProvider.CreateEndpointHandlerSingleton(Handlers.ToList()); //endpoints saved
         }
 
         public static void ResolveRequest(byte[] incomingBytes)//service provider instance that is passed from the application builder context
         {
-            var CalledEndpoint = getAssociatedEndpoints(incomingBytes);
+            List<(object request, EndpointTypeProperties endpointProp)> CalledEndpoint = getAssociatedEndpoints(incomingBytes);
 
+            List<(object requestObject, object EndpointObject)> endpoint = CalledEndpoint.Select( E => {
+                return (E.request, prepareEndpoint(E.endpointProp));
+            }).ToList();
+
+            foreach (var resolve in endpoint)
+            {
+                resolve.EndpointObject.GetType();
+            }
+
+            
 
         }
 
         //gets called each time a message is recieved, invokes the appropriate endpoint 
-        private static List<EndpointTypeProperties> getAssociatedEndpoints(byte[] incomingBytes)
+        private static List<(object request, EndpointTypeProperties endpointProp)> getAssociatedEndpoints(byte[] incomingBytes)
         {
            
             var requestEndpointType = EndpointsTypeProvider.getRequestInstance();
 
             var RequestEndpointObject = ProtobufAccessHelper.Decode(requestEndpointType, incomingBytes); //class includes list of objects of extended type irequest
 
-            var EndpointList = new List<EndpointTypeProperties>();
+            var EndpointList = new List<(object request, EndpointTypeProperties endpointProp)>(); //list of tuple that takes a request and endpoint
 
             requestEndpointType.GetRuntimeFields().ToList().ForEach(field =>
             {
@@ -56,7 +77,7 @@ namespace ProtobufWebsocket.EndpointHelper
                         RuntimeArrayHelpers.loopRuntimeArray(fieldArr!, (element) =>
                         {
                             //get the Request's coresponding endpoint
-                            EndpointList.Add(RequestMappingHelper.GetEndpoint(element.GetType()));
+                            EndpointList.Add((element, RequestMappingHelper.GetEndpoint(element.GetType())));
 
                         });
                     }
@@ -67,21 +88,16 @@ namespace ProtobufWebsocket.EndpointHelper
         }
 
         //intializes an endpoint along with its constructor parameters
-        private static object prepareEndpoint(EndpointTypeProperties endpoint, IServiceProvider serviceProvider) //endpopint is created, dependencies resolved.
+        private static object prepareEndpoint(EndpointTypeProperties endpoint) //endpopint is created, dependencies resolved.
         {
-            var scope = serviceProvider.CreateScope();
-            var provider = scope.ServiceProvider;
 
             //an array of objects is constructed using dependency injection
             var constructorObjects = new List<object>();
 
             foreach(var param in endpoint.EndpointConstructorParams)
             {
-                var constructedService = provider.GetRequiredService(param); //services gets constructed using DI
-                if(constructedService != null)
-                {
-                    constructorObjects.Add(constructedService);
-                }
+                var IntializedParam = DependencyInjectionHelper.IntializeWithDI(param);
+                constructorObjects.Add(IntializedParam);
             }
 
             var endpointType = endpoint.EndpointType;
@@ -92,7 +108,7 @@ namespace ProtobufWebsocket.EndpointHelper
 
         }
 
-        public void invokeEndpointHandle()
+        public void invokeEndpointHandle(object endpoint)
         {
 
         }

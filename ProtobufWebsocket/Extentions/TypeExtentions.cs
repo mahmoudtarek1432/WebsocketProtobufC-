@@ -32,9 +32,10 @@ namespace ProtobufWebsocket.Extentions
                 var parameters = constructor.GetParameters();
                 foreach ( var param in parameters)
                 {
-                    paramsList.Add(param.ParameterType;
+                    paramsList.Add(param.ParameterType);
                 }
             }
+            return paramsList;
         }
     }
 }

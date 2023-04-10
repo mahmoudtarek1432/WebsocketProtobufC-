@@ -12,16 +12,11 @@ namespace ProtobufWebsocket.RequestMapping
     {
         public static void MapRequestToEndpoint(Type request, Type Endpoint)
         {
-            var predicat = request.CustomAttributes.Where(A =>
-                A.GetType().Name == typeof(EndpointRequestAttribute).Name);
-            if (!predicat.Any())
-                throw new Exception($"the passed type is not a request {MapRequestToEndpoint}");
 
-            var requestClassName = request.GetType().Name;
+            var requestClassName = request.Name;
 
             var map = RequestMapProvider.GetRequestMap();
-
-            if (!(map[requestClassName] != null))
+            if (map.TryGetValue(requestClassName, out var endpoint))
                 throw new Exception($"The request: {requestClassName} is associated with multiple endpoints");
 
             var parameters = Endpoint.RetriveConstructorParameters();
@@ -33,12 +28,8 @@ namespace ProtobufWebsocket.RequestMapping
 
         public static EndpointTypeProperties GetEndpoint(Type request)
         {
-            var predicat = request.CustomAttributes.Where(A =>
-                A.GetType().Name == typeof(EndpointRequestAttribute).Name);
-            if (!predicat.Any())
-                throw new Exception($"the passed type is not a request {MapRequestToEndpoint}");
-
-            var requestClassName = request.GetType().Name;
+            
+            var requestClassName = request.Name;
 
             var map = RequestMapProvider.GetRequestMap();
 
