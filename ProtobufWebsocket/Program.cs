@@ -6,15 +6,17 @@ using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Attributes;
 using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.Endpoint_Provider;
+using ProtobufWebsocket.EndpointApi;
 using ProtobufWebsocket.EndpointHelper;
 using ProtobufWebsocket.Model;
 using ProtobufWebsocket.Protobuf_Helper;
+using ProtobufWebsocket.Services;
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 
-
 var a = Assembly.GetExecutingAssembly();
+
 
 var product = new ProductResponse() { Name = "name", Description = "desc", Price = 5 };
 
@@ -37,5 +39,16 @@ using(MemoryStream ms = new MemoryStream(serialized))
     Console.WriteLine();
 }
 
+var end = typeof(testendpoint);
+
+var d = typeof(product).GetConstructors().First().GetParameters()[1].ParameterType;
 
 Console.WriteLine();
+
+class testendpoint : ProtoEndpoint.Request<product>.WithResponse<ProductResponse>
+{
+    public override Task<ProductResponse> Handle(product Request)
+    {
+        throw new NotImplementedException();
+    }
+}

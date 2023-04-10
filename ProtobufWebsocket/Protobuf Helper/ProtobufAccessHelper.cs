@@ -40,8 +40,6 @@ namespace ProtobufWebsocket.Protobuf_Helper
 
             var responseEndpointType = EndpointsTypeProvider.getResponseInstance(); //endpoint response singleton
 
-            var fields = responseEndpointType.GetRuntimeFields(); //includes lists of IResponses
-
             responseEndpointType.GetRuntimeFields().ToList().ForEach(field =>
             {
                 if (field.FieldType.IsArray)

@@ -112,5 +112,41 @@ namespace ProtobufWebsocket.Assembly_Helpers
 
             return createdArray;
         }
+
+        public static void loopRuntimeArray(object Array, Action<object> process)
+        {
+            if (!Array.GetType().IsArray)
+                throw new Exception($"Passed object is not an array {nameof(extendRuntimeArray)}");
+
+            var initialLength = GetRuntimeArrayLength(Array);
+            var elementType = Array.GetType().GetElementType();
+
+            var ArrayGetMethod = Array.GetType().GetMethod("Get"); //Get(index)
+
+
+            for (int index = 0; index < initialLength; index++)
+            {
+                var Element = ArrayGetMethod!.Invoke(Array, new object[] { index });
+                process(Element);
+            }
+        }
+
+        public static void loopRuntimeArray(object Array, Action<object,int> process)
+        {
+            if (!Array.GetType().IsArray)
+                throw new Exception($"Passed object is not an array {nameof(extendRuntimeArray)}");
+
+            var initialLength = GetRuntimeArrayLength(Array);
+            var elementType = Array.GetType().GetElementType();
+
+            var ArrayGetMethod = Array.GetType().GetMethod("Get"); //Get(index)
+
+
+            for (int index = 0; index < initialLength; index++)
+            {
+                var Element = ArrayGetMethod!.Invoke(Array, new object[] { index });
+                process(Element,index);
+            }
+        }
     }
 }
