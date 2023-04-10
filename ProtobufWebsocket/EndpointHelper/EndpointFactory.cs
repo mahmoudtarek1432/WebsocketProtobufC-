@@ -35,14 +35,15 @@ namespace ProtobufWebsocket.EndpointHelper
 
         }
 
-        private static List<Type> getAssociatedEndpoints(byte[] incomingBytes)
+        //gets called each time a message is recieved, invokes the appropriate endpoint 
+        private static List<EndpointTypeProperties> getAssociatedEndpoints(byte[] incomingBytes)
         {
-            //gets called each time a message is recieved, invokes the appropriate endpoint 
+           
             var requestEndpointType = EndpointsTypeProvider.getRequestInstance();
 
             var RequestEndpointObject = ProtobufAccessHelper.Decode(requestEndpointType, incomingBytes); //class includes list of objects of extended type irequest
 
-            var EndpointList = new List<Type>();
+            var EndpointList = new List<EndpointTypeProperties>();
 
             requestEndpointType.GetRuntimeFields().ToList().ForEach(field =>
             {
@@ -65,12 +66,30 @@ namespace ProtobufWebsocket.EndpointHelper
             return EndpointList;
         }
 
-        private static void prepareEndpoint(Type endpoint, IServiceProvider serviceProvider) //endpopint is created, dependencies resolved.
+        //intializes an endpoint along with its constructor parameters
+        private static object prepareEndpoint(EndpointTypeProperties endpoint, IServiceProvider serviceProvider) //endpopint is created, dependencies resolved.
         {
             var scope = serviceProvider.CreateScope();
             var provider = scope.ServiceProvider;
-            //endpoint.GetConstructors(BindingFlags.Instance | BindingFlags.Public).First().getp
-            //provider.GetRequiredService();
+
+            //an array of objects is constructed using dependency injection
+            var constructorObjects = new List<object>();
+
+            foreach(var param in endpoint.EndpointConstructorParams)
+            {
+                var constructedService = provider.GetRequiredService(param); //services gets constructed using DI
+                if(constructedService != null)
+                {
+                    constructorObjects.Add(constructedService);
+                }
+            }
+
+            var endpointType = endpoint.EndpointType;
+
+            object endpointInstance = Activator.CreateInstance(endpointType, constructorObjects.ToArray())!; //might have issues with object placment
+
+            return endpointInstance;
+
         }
 
         public void invokeEndpointHandle()

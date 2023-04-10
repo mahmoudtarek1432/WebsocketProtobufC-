@@ -1,4 +1,5 @@
 ﻿using ProtobufWebsocket.Attributes;
+using ProtobufWebsocket.Extentions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +24,14 @@ namespace ProtobufWebsocket.RequestMapping
             if (!(map[requestClassName] != null))
                 throw new Exception($"The request: {requestClassName} is associated with multiple endpoints");
 
-            map.Add(requestClassName, Endpoint);
+            var parameters = Endpoint.RetriveConstructorParameters();
+
+            var endpointProp = new EndpointTypeProperties() { EndpointType = Endpoint, EndpointConstructorParams = parameters };
+
+            map.Add(requestClassName, endpointProp);
         }
 
-        public static Type GetEndpoint(Type request)
+        public static EndpointTypeProperties GetEndpoint(Type request)
         {
             var predicat = request.CustomAttributes.Where(A =>
                 A.GetType().Name == typeof(EndpointRequestAttribute).Name);
