@@ -18,7 +18,7 @@ namespace ProtobufWebsocket.EndpointHelper
 {
     internal class EndpointHelper
     {
-        public static void PullEndpointThroughAssembly(Assembly assembly)
+        public static void PrepareEndpointHandlers(Assembly assembly)
         {
             var globalTypes = AssemblyHelper.loadAssemblyTypes(assembly);
 
@@ -113,14 +113,8 @@ namespace ProtobufWebsocket.EndpointHelper
             return endpointInstance;
 
         }
-
-        public void invokeEndpointHandle(object endpoint)
-        {
-
-        }
         
-
-        public static object PopulateType(Type StaticType, object runtimeObject) //clones runtime value, the runtime type has the exact same properties and fields
+        private static object PopulateType(Type StaticType, object runtimeObject) //clones runtime value, the runtime type has the exact same properties and fields
         {
             //getUninitializedObject returns an object of type, without getting instantiated.
             //this is used as the types passed are usually modles and dtos that does not have constructor implementations.
