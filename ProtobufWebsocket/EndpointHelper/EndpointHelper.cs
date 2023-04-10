@@ -49,10 +49,16 @@ namespace ProtobufWebsocket.EndpointHelper
 
             foreach (var resolve in endpoint)
             {
-                resolve.EndpointObject.GetType();
+                var endpointHandlerType = resolve.EndpointObject.GetType();
+                var handleDelegate = endpointHandlerType.GetMethod("Handle");
+
+                var Requesttype = endpointHandlerType.BaseType!.GetGenericArguments().Where(A => A.BaseType.Name == typeof(IRequest).Name).FirstOrDefault();
+                var HandlerRequest = PopulateType(Requesttype, resolve.requestObject); //returns an instance of the concrete class created as a request type
+
+                handleDelegate.Invoke(resolve.EndpointObject, new object[] { HandlerRequest }); //second argument is the request object
             }
 
-            
+
 
         }
 
@@ -113,5 +119,20 @@ namespace ProtobufWebsocket.EndpointHelper
 
         }
         
+
+        public static object PopulateType(Type StaticType, object runtimeObject) //clones runtime value, the runtime type has the exact same properties and fields
+        {
+            //getUninitializedObject returns an object of type, without getting instantiated.
+            //this is used as the types passed are usually modles and dtos that does not have constructor implementations.
+            
+            var staticTypeInstance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(StaticType);
+
+            foreach (var field in staticTypeInstance.GetType().GetProperties())
+            {
+                var runtimeFieldValue = runtimeObject.GetType().GetField(field.Name).GetValue(runtimeObject);
+                field.SetValue(staticTypeInstance, runtimeFieldValue);
+            }
+            return staticTypeInstance;
+        }
     }
 }

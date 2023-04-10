@@ -22,7 +22,7 @@ var a = Assembly.GetExecutingAssembly();
 var product = new ProductResponse() { Name = "name", Description = "desc", Price = 5 };
 
 ProtobufCreationHelper.IntializeProtoEnvironment("endpoint", a);
-//EndpointHelper.PullEndpointThroughAssembly(a);
+EndpointHelper.PullEndpointThroughAssembly(a);
 
 var x = new ProductResponse[] {product, product , product };
 var s = x.GetType();
@@ -54,6 +54,7 @@ class testendpoint : ProtoEndpoint.Request<product>.WithResponse<ProductResponse
 {
     public override Task<ProductResponse> Handle(product Request)
     {
-        throw new NotImplementedException();
+        Console.WriteLine("ITS WORKING !!!!");
+        return null;
     }
 }
