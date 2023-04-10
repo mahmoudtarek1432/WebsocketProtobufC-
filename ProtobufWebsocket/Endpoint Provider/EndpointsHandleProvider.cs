@@ -8,9 +8,9 @@ namespace ProtobufWebsocket.Endpoint_Provider
 {
     internal class EndpointsHandleProvider
     {
-        static Type[] _Handlers { get; set; }
+        static List<Type> _Handlers { get; set; }
 
-        public static Type[] getEndpointHandlersType()
+        public static IEnumerable<Type> getEndpointHandlersType()
         {
             if (_Handlers == null)
             {
@@ -19,7 +19,7 @@ namespace ProtobufWebsocket.Endpoint_Provider
             return _Handlers;
         }
 
-        public static void CreateEndpointHandlerSingleton(Type[] handlers)
+        public static void CreateEndpointHandlerSingleton(List<Type> handlers)
         {
             _Handlers = handlers;
         }

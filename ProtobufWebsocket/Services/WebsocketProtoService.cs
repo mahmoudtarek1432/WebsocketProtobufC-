@@ -14,7 +14,7 @@ namespace ProtobufWebsocket.Services
 {
     public static class WebsocketProtoService
     {
-        public static void AddProtoWebsocketService(this IServiceProvider Service, string address, System.Reflection.Assembly assembly)
+        public static void AddProtoWebsocketService(this IServiceCollection Service, string address, System.Reflection.Assembly assembly)
         {
             //fetch for types accross the running code with attribute names given
             ProtobufCreationHelper.IntializeProtoEnvironment("endpoint", assembly);

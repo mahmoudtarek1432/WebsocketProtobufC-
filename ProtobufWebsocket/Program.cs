@@ -14,7 +14,6 @@ using System.ComponentModel;
 using System.Reflection;
 
 
-
 var a = Assembly.GetExecutingAssembly();
 
 var product = new ProductResponse() { Name = "name", Description = "desc", Price = 5 };

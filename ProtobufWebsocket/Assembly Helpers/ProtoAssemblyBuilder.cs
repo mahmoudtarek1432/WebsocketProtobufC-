@@ -11,7 +11,7 @@ namespace ProtobufWebsocket.Assembly_Helpers
         //the types used inside endpointDTOs
         public static ModuleBuilder DefineNewModule(string assemblyName)
         {
-            var AName = new System.Reflection.AssemblyName(assemblyName);
+            var AName = new AssemblyName(assemblyName);
             var DynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(AName, AssemblyBuilderAccess.Run);
             var definedModule = DynamicAssembly.DefineDynamicModule(AName.Name!);
             return definedModule;
