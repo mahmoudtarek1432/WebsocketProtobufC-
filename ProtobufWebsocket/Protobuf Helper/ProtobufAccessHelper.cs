@@ -33,10 +33,17 @@ namespace ProtobufWebsocket.Protobuf_Helper
             }
         }
 
-
-        public static object fillEndpoint<T>(T endpointObject) where T : ISerializable
+        /**
+         * 
+         * Fills an endpoint with responses, responseEndpoint param when null creates an empty endpoint
+         * if an endpoint is passed, responses get pushed into the arrays
+         */
+        public static object fillEndpoint(object endpointObject, object responseEndpoint = null)
         {
-            var ResposneEndpointObject = createResponseEndpoint();
+            if(responseEndpoint == null)
+            {
+                responseEndpoint = createResponseEndpoint();
+            }
 
             var responseEndpointType = EndpointsTypeProvider.getResponseInstance(); //endpoint response singleton
 
@@ -48,7 +55,7 @@ namespace ProtobufWebsocket.Protobuf_Helper
                     if (endpointObject.GetType().Name == field.FieldType.GetElementType()!.Name) //fieldtype.name will return a string in the form of listtypename + []
                     {
                         //activator when used on an array returns object of the inside list.
-                        var SerializableObjectArray = field.GetValue(ResposneEndpointObject);
+                        var SerializableObjectArray = field.GetValue(responseEndpoint);
                         if (SerializableObjectArray == null)
                         {
                             SerializableObjectArray = Array.CreateInstance(field.FieldType.GetElementType()!, 1); // creates an array
@@ -56,12 +63,12 @@ namespace ProtobufWebsocket.Protobuf_Helper
 
                         var AppendedArray = RuntimeArrayHelpers.AppendDynamicArray(SerializableObjectArray, endpointObject);
 
-                        field.SetValue(ResposneEndpointObject, AppendedArray);
+                        field.SetValue(responseEndpoint, AppendedArray);
                     }
                 }
 
             });
-            return ResposneEndpointObject!;
+            return responseEndpoint!;
         }
 
         private static object? createResponseEndpoint()

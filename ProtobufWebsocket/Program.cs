@@ -46,15 +46,15 @@ var end = typeof(ProtoEndpoint.Request<product>.WithResponse<ProductResponse>);
 
 var d = typeof(product).GetConstructors().First().GetParameters()[1].ParameterType;
 
-EndpointHelper.ResolveRequest(serialized);
+EndpointHelper.ResolveRequest(serialized,"1");
 
 Console.WriteLine();
 
 class testendpoint : ProtoEndpoint.Request<product>.WithResponse<ProductResponse>
 {
-    public override Task<ProductResponse> Handle(product Request)
+    public override async Task<ProductResponse> Handle(product Request)
     {
         Console.WriteLine("ITS ALIVE !!!!");
-        return null;
+        return new ProductResponse() { Name = "name", Description = "desc", Price = 5 };
     }
 }

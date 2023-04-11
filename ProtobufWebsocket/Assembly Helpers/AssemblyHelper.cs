@@ -13,5 +13,9 @@ namespace ProtobufWebsocket.Assembly_Helpers
             return assembly.GetTypes();
         }
 
+        public static object resolveTask(object Task)
+        {
+            return Task.GetType().GetProperty("Result").GetValue(Task);
+        }
     }
 }

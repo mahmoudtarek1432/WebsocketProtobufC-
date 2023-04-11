@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Attributes;
+using ProtobufWebsocket.Broadcast_Helper;
 using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.Model;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,33 +34,46 @@ namespace ProtobufWebsocket.EndpointHelper
                 var Requesttype = handler.BaseType!.GetGenericArguments().Where(A => A.BaseType.Name == typeof(IRequest).Name).FirstOrDefault();
                 if (Requesttype != null)
                 {
-                    RequestMappingHelper.MapRequestToEndpoint(Requesttype!, handler);
+                    RequestMappingHelper.MapRequestToEndpoint(Requesttype!, handler);      //maps an endpoint to a request
+                    broadcastDictionaryProvider.CreateNewDictionaryInstance(handler.Name); //intialize an endpoint dictionary
                 }
             }
 
             EndpointsHandleProvider.CreateEndpointHandlerSingleton(Handlers.ToList()); //endpoints saved
         }
 
-        public static void ResolveRequest(byte[] incomingBytes)//service provider instance that is passed from the application builder context
+        public static byte[] ResolveRequest(byte[] incomingBytes, string userId)//service provider instance that is passed from the application builder context
         {
             List<(object request, EndpointTypeProperties endpointProp)> CalledEndpoint = getAssociatedEndpoints(incomingBytes);
 
-            List<(object requestObject, object EndpointObject)> endpoint = CalledEndpoint.Select( E => {
-                return (E.request, prepareEndpoint(E.endpointProp));
-            }).ToList();
-
-            foreach (var resolve in endpoint)
+            List<(object requestObject, object EndpointObject)> endpoints = CalledEndpoint.Select( E => {
+                                                                                            return (E.request, prepareEndpointObject(E.endpointProp));
+                                                                                        }).ToList();
+            var encoded = new byte[] { };
+            foreach (var resolve in endpoints)
             {
-                var endpointHandlerType = resolve.EndpointObject.GetType();
-                var handleDelegate = endpointHandlerType.GetMethod("Handle");
+                if (CheckIfBroadcast(resolve.requestObject))
+                {
+                    var endpointType = resolve.EndpointObject.GetType();
+                    broadcastDictionaryProvider.AddUserToEndpoint(endpointType.Name, userId);
+                }
+                //ask about it 
 
-                var Requesttype = endpointHandlerType.BaseType!.GetGenericArguments().Where(A => A.BaseType.Name == typeof(IRequest).Name).FirstOrDefault();
-                var HandlerRequest = PopulateType(Requesttype, resolve.requestObject); //returns an instance of the concrete class created as a request type
+                var endpointWithUID =  PassUserId(resolve.EndpointObject, userId);
+                var requestObject = resolve.requestObject;
 
-                handleDelegate.Invoke(resolve.EndpointObject, new object[] { HandlerRequest }); //second argument is the request object
+                var handlerReturnObject = InvokeHandler(requestObject, endpointWithUID);
+                var invokeReturnType = handlerReturnObject.GetType().GetProperty("Result").GetValue(handlerReturnObject);
+                //serialize and return to user
+
+                var responseEndpoint = ProtobufAccessHelper.fillEndpoint(invokeReturnType, null);
+
+                encoded = ProtobufAccessHelper.Encode(responseEndpoint);
+
+                
             }
 
-
+            return encoded;
 
         }
 
@@ -94,7 +109,7 @@ namespace ProtobufWebsocket.EndpointHelper
         }
 
         //intializes an endpoint along with its constructor parameters
-        private static object prepareEndpoint(EndpointTypeProperties endpoint) //endpopint is created, dependencies resolved.
+        private static object prepareEndpointObject(EndpointTypeProperties endpoint) //endpopint is created, dependencies resolved.
         {
 
             //an array of objects is constructed using dependency injection
@@ -127,6 +142,41 @@ namespace ProtobufWebsocket.EndpointHelper
                 field.SetValue(staticTypeInstance, runtimeFieldValue);
             }
             return staticTypeInstance;
+        }
+
+        public static object InvokeHandler(object requestObject, object EndpointObject)
+        {
+            var endpointHandlerType = EndpointObject.GetType();
+            var handleDelegate = endpointHandlerType.GetMethod("Handle");
+
+            var Requesttype = endpointHandlerType.BaseType!.GetGenericArguments().Where(A => A.BaseType.Name == typeof(IRequest).Name).FirstOrDefault();
+            var HandlerRequest = PopulateType(Requesttype,requestObject); //returns an instance of the concrete class created as a request type
+
+            return handleDelegate.Invoke(EndpointObject, new object[] { HandlerRequest }); //second argument is the request object
+        }
+
+        //checks if the passed object that inherets IRequest is a broadcast subscription request
+        public static bool CheckIfBroadcast(object Request)
+        {
+            var cr = new checkRequest();
+
+            var Is_subscribeField = Request.GetType().GetRuntimeField(nameof(cr.is_subscribe));
+
+            return (bool) Is_subscribeField!.GetValue(Request)!;
+
+        }
+
+        public static object PassUserId(object endpoint, string UserId)
+        {
+            var endpointType = endpoint.GetType();
+            var field = endpointType.GetField("userGUID");
+
+            if (field == null)
+                throw new Exception($"field userGUID is not present in {endpointType.FullName}");
+
+            field.SetValue(endpoint, UserId);
+
+            return endpoint;
         }
     }
 }

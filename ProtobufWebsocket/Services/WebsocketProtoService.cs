@@ -8,6 +8,7 @@ using ProtobufWebsocket.Websocket_Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Builder;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace ProtobufWebsocket.Services
     {
         public static void AddProtoWebsocketService(this IServiceCollection Service, string address, System.Reflection.Assembly assembly)
         {
+            Service.BuildServiceProvider();
             //fetch for types accross the running code with attribute names given
             ProtobufCreationHelper.IntializeProtoEnvironment("endpoint", assembly);
 
@@ -29,9 +31,15 @@ namespace ProtobufWebsocket.Services
             server.Start();
         }
 
-        public static void UseProtoWebsocketServiceDI(IServiceProvider serviceProvider)
+        public static void UseProtoWebsocketServiceDI(this IServiceProvider serviceProvider)
         {
             ExcutingServiceProvider.CreateInstance(serviceProvider);
+        }
+
+        public static void UseProtoWebsocketServiceDI(this IApplicationBuilder applicationBuilder)
+        {
+            var ServiceProvider = applicationBuilder.ApplicationServices;
+            ExcutingServiceProvider.CreateInstance(ServiceProvider);
         }
     }
 }
