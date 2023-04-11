@@ -62,11 +62,11 @@ namespace ProtobufWebsocket.EndpointHelper
                 var endpointWithUID =  PassUserId(resolve.EndpointObject, userId);
                 var requestObject = resolve.requestObject;
 
-                var handlerReturnObject = InvokeHandler(requestObject, endpointWithUID);
-                var invokeReturnType = handlerReturnObject.GetType().GetProperty("Result").GetValue(handlerReturnObject);
+                var handlerReturnObject = InvokeHandler(requestObject, endpointWithUID); //returns a task<object>
+                var invokeReturnType = AssemblyHelper.resolveTask(handlerReturnObject);
                 //serialize and return to user
 
-                var responseEndpoint = ProtobufAccessHelper.fillEndpoint(invokeReturnType, null);
+                var responseEndpoint = ProtobufAccessHelper.fillEndpoint(invokeReturnType, null); //second param to create a new endpoint
 
                 encoded = ProtobufAccessHelper.Encode(responseEndpoint);
 
@@ -78,7 +78,7 @@ namespace ProtobufWebsocket.EndpointHelper
         }
 
         //gets called each time a message is recieved, invokes the appropriate endpoint 
-        private static List<(object request, EndpointTypeProperties endpointProp)> getAssociatedEndpoints(byte[] incomingBytes)
+        internal static List<(object request, EndpointTypeProperties endpointProp)> getAssociatedEndpoints(byte[] incomingBytes)
         {
            
             var requestEndpointType = EndpointsTypeProvider.getRequestInstance();
@@ -109,7 +109,7 @@ namespace ProtobufWebsocket.EndpointHelper
         }
 
         //intializes an endpoint along with its constructor parameters
-        private static object prepareEndpointObject(EndpointTypeProperties endpoint) //endpopint is created, dependencies resolved.
+        internal static object prepareEndpointObject(EndpointTypeProperties endpoint) //endpopint is created, dependencies resolved.
         {
 
             //an array of objects is constructed using dependency injection
@@ -129,7 +129,7 @@ namespace ProtobufWebsocket.EndpointHelper
 
         }
         
-        private static object PopulateType(Type StaticType, object runtimeObject) //clones runtime value, the runtime type has the exact same properties and fields
+        internal static object PopulateType(Type StaticType, object runtimeObject) //clones runtime value, the runtime type has the exact same properties and fields
         {
             //getUninitializedObject returns an object of type, without getting instantiated.
             //this is used as the types passed are usually modles and dtos that does not have constructor implementations.
@@ -144,7 +144,7 @@ namespace ProtobufWebsocket.EndpointHelper
             return staticTypeInstance;
         }
 
-        public static object InvokeHandler(object requestObject, object EndpointObject)
+        internal static object InvokeHandler(object requestObject, object EndpointObject)
         {
             var endpointHandlerType = EndpointObject.GetType();
             var handleDelegate = endpointHandlerType.GetMethod("Handle");
@@ -156,7 +156,7 @@ namespace ProtobufWebsocket.EndpointHelper
         }
 
         //checks if the passed object that inherets IRequest is a broadcast subscription request
-        public static bool CheckIfBroadcast(object Request)
+        internal static bool CheckIfBroadcast(object Request)
         {
             var cr = new checkRequest();
 

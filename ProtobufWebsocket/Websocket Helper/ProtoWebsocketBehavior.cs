@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebSocketSharp;
+using ProtobufWebsocket.EndpointApi;
 using WebSocketSharp.Server;
+using ProtobufWebsocket.Assembly_Helpers;
+using ProtobufWebsocket.Model;
+using ProtobufWebsocket.Protobuf_Helper;
 
 namespace ProtobufWebsocket.Websocket_Helper
 {
@@ -18,6 +22,8 @@ namespace ProtobufWebsocket.Websocket_Helper
 
         protected override void OnMessage(MessageEventArgs e)
         {
+            var responseObject = ProtoEndpointApi.ResolveRequest(e.RawData, ID);
+            Send(responseObject);
             base.OnMessage(e);
         }
     }

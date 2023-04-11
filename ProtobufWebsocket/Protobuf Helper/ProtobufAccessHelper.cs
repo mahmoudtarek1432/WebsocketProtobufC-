@@ -28,6 +28,7 @@ namespace ProtobufWebsocket.Protobuf_Helper
         {
             using (MemoryStream ms = new MemoryStream(bytes))
             {
+                
                 var decoded = ProtoBuf.Serializer.Deserialize(type, ms);
                 return decoded;
             }

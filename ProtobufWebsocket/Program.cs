@@ -8,15 +8,53 @@ using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.EndpointApi;
 using ProtobufWebsocket.EndpointHelper;
-using ProtobufWebsocket.Model;
 using ProtobufWebsocket.Protobuf_Helper;
 using ProtobufWebsocket.Services;
+using ProtobufWebsocket.TestModels;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 
-var a = Assembly.GetExecutingAssembly();
+
+var Reqlist = new List<product>();
+Reqlist.Add(new product { Name = "hello" });
+
+var Reslist = new List<ProductResponse>();
+Reslist.Add(new ProductResponse { Description = "hello" });
+
+var x = new RequestEndpoint { product = Reqlist };
+var z = new ResponseEndpoint { ProductResponse = Reslist };
+
+
+var v = ProtobufAccessHelper.Encode(z);
+var d = ProtobufAccessHelper.Decode(x.GetType(), v);
+Console.WriteLine();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*var a = Assembly.GetExecutingAssembly();
 
 
 var product = new ProductResponse() { Name = "name", Description = "desc", Price = 5 };
@@ -42,19 +80,19 @@ using(MemoryStream ms = new MemoryStream(serialized))
 }
 
 
-var end = typeof(ProtoEndpoint.Request<product>.WithResponse<ProductResponse>);
+var end = typeof(ProtoEndpointBase.Request<product>.WithResponse<ProductResponse>);
 
-var d = typeof(product).GetConstructors().First().GetParameters()[1].ParameterType;
+//var d = typeof(product).GetConstructors().First().GetParameters()[1].ParameterType;
 
 EndpointHelper.ResolveRequest(serialized,"1");
 
 Console.WriteLine();
 
-class testendpoint : ProtoEndpoint.Request<product>.WithResponse<ProductResponse>
+class testendpoint : ProtoEndpointBase.Request<product>.WithResponse<ProductResponse>
 {
     public override async Task<ProductResponse> Handle(product Request)
     {
         Console.WriteLine("ITS ALIVE !!!!");
         return new ProductResponse() { Name = "name", Description = "desc", Price = 5 };
     }
-}
+}*/

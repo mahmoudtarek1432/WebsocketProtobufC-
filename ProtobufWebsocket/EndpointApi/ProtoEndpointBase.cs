@@ -10,7 +10,7 @@ using System.Reflection;
 
 namespace ProtobufWebsocket.EndpointApi
 {
-    public static class ProtoEndpoint
+    public static class ProtoEndpointBase
     {
         internal class Request<R> where R : IRequest
         {
