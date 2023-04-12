@@ -78,7 +78,7 @@ class testendpoint : ProtoEndpointBase.Request<product>.WithResponse<ProductResp
     public override async Task<ProductResponse> Handle(product Request)
     {
         Console.WriteLine("ITS ALIVE !!!! my ID is "+ UserId);
-        var pr = new ProductResponse() { Name = _nameingService.GetnameCongrats("mahmoud"), Description = "this was returned from the response handler", Price = 100000 };
+        var pr = new ProductResponse() { Name = _nameingService.GetnameCongrats("mahmoud"), Description = "this wadfffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffggggggggs returned from the response handler", Price = 100000 };
         return pr;
     }
 }
