@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using System.Reflection;
+using ProtobufWebsocket.EndpointHelpers;
 
 namespace ProtobufWebsocket.EndpointApi
 {
@@ -23,8 +24,9 @@ namespace ProtobufWebsocket.EndpointApi
             }
         }
 
-        internal abstract class Notification<Response> : IDynamicEndpoint where Response : IResponse
+        internal abstract class Notification<Response> : INotificationEndpoint , IDynamicEndpoint where Response : IResponse
         {
+            public abstract Task<Response> Handle();
 
         }
     }

@@ -147,6 +147,15 @@ namespace ProtobufWebsocket.EndpointHelper
             return handleDelegate.Invoke(EndpointObject, new object[] { HandlerRequest }); //second argument is the request object
         }
 
+        //with no arguments
+        internal static object InvokeHandler(object EndpointObject)
+        {
+            var endpointHandlerType = EndpointObject.GetType();
+            var handleDelegate = endpointHandlerType.GetMethod("Handle");
+
+            return handleDelegate.Invoke(EndpointObject, new object[] { })!; //second argument is the request object
+        }
+
         //checks if the passed object that inherets IRequest is a broadcast subscription request
         internal static bool CheckIfBroadcast(object Request)
         {

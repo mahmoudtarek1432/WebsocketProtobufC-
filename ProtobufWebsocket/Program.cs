@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using ProtoBuf.Meta;
 using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Attributes;
+using ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Service;
 using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.EndpointApi;
@@ -25,6 +26,8 @@ Host.CreateDefaultBuilder(args).ConfigureServices(s =>
     s.AddTransient<INameingService, NamingService>();
     s.AddProtoWebsocketService("ws://127.0.0.1/","/test", Assembly.GetExecutingAssembly());
 }).Build();
+
+new NotificationService().SendNotification<testNotifications>();
 
 Console.ReadLine();
 //WebsocketProtoService.AddProtoWebsocketService()
@@ -77,5 +80,20 @@ class testendpoint : ProtoEndpointBase.Request<product>.WithResponse<ProductResp
         Console.WriteLine("ITS ALIVE !!!! my ID is "+ UserId);
         var pr = new ProductResponse() { Name = _nameingService.GetnameCongrats("mahmoud"), Description = "this was returned from the response handler", Price = 100000 };
         return pr;
+    }
+}
+
+class testNotifications : ProtoEndpointBase.Notification<ProductResponse>
+{
+    private readonly INameingService _nameingService;
+
+    public testNotifications(INameingService name)
+    {
+        _nameingService = name;
+    }
+
+    public override Task<ProductResponse> Handle()
+    {
+        throw new NotImplementedException();
     }
 }

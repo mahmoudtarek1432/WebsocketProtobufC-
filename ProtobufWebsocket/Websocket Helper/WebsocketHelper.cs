@@ -27,7 +27,7 @@ namespace ProtobufWebsocket.Websocket_Helper
 
             if (server.WebSocketServices.TryGetServiceHost(Path,out var host))
             {
-                ServerInstance.createSessionInstance(host.Sessions);
+                SessionInstance.createSessionInstance(host.Sessions);
             }
            
 

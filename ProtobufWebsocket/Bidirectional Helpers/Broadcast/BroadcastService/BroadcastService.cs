@@ -33,16 +33,17 @@ namespace ProtobufWebsocket.Broadcast_Helper
             endpointObject = EndpointHelper.EndpointHelper.PassUserId(endpointObject, "broadcast");
             EndpointHelper.EndpointHelper.handle(endpointObject, request);
 
-            var sessions = ServerInstance.getSessionInstance();
+            var sessions = SessionInstance.getSessionManagerInstance();
 
             //invoke handler
 
-            ThreadPool.QueueUserWorkItem(delegate
-            {
-                //potential problem with write requests
-                foreach (var userId in endpointusers)
+            Task.Run(delegate { 
+                    //potential problem with write requests
+                    foreach (var userId in endpointusers)
                 {
-                    sessions[userId].Context.WebSocket.SendAsync(new byte[] { }, (b) => Console.Write("BroadCastSent"));
+                    endpointObject = EndpointHelper.EndpointHelper.PassUserId(endpointObject, userId);
+                    var sentbytes = EndpointHelper.EndpointHelper.handle(endpointObject, request);
+                    sessions[userId].Context.WebSocket.SendAsync(sentbytes, (b) => Console.Write("BroadCastSent"));
                 }
             });
         }

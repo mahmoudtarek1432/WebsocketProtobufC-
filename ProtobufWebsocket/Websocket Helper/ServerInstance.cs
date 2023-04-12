@@ -7,11 +7,11 @@ using WebSocketSharp.Server;
 
 namespace ProtobufWebsocket.Websocket_Helper
 {
-    internal class ServerInstance
+    internal class SessionInstance
     {
         static WebSocketSessionManager _Session { get; set; }
 
-        public static WebSocketSessionManager getSessionInstance()
+        public static WebSocketSessionManager getSessionManagerInstance()
         {
             if(_Session == null)
             {
