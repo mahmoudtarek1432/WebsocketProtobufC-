@@ -23,7 +23,7 @@ using System.Text.Json;
 Host.CreateDefaultBuilder(args).ConfigureServices(s =>
 {
     s.AddTransient<INameingService, NamingService>();
-    s.AddProtoWebsocketService("ws://127.0.0.1/", Assembly.GetExecutingAssembly());
+    s.AddProtoWebsocketService("ws://127.0.0.1/","/test", Assembly.GetExecutingAssembly());
 }).Build();
 
 Console.ReadLine();
@@ -74,7 +74,7 @@ class testendpoint : ProtoEndpointBase.Request<product>.WithResponse<ProductResp
     }
     public override async Task<ProductResponse> Handle(product Request)
     {
-        Console.WriteLine("ITS ALIVE !!!! my ID is "+UserId);
+        Console.WriteLine("ITS ALIVE !!!! my ID is "+ UserId);
         var pr = new ProductResponse() { Name = _nameingService.GetnameCongrats("mahmoud"), Description = "this was returned from the response handler", Price = 100000 };
         return pr;
     }

@@ -28,5 +28,13 @@ namespace ProtobufWebsocket.Websocket_Helper
             Send(responseObject);
             base.OnMessage(e);
         }
+
+        private void AsyncCallback(bool flag)
+        {
+            if(flag)
+            {
+                Console.WriteLine("message was sent");
+            }
+        }
     }
 }

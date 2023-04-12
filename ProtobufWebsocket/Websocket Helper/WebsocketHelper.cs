@@ -16,14 +16,21 @@ namespace ProtobufWebsocket.Websocket_Helper
     public static class WebsocketBuilder
     {
         // use ws for insecure and wss for secure connection
-        public static WebSocketServer ConfigureServer(string Address)
+        public static WebSocketServer ConfigureServer(string Address, string Path)
         {
             if (string.IsNullOrEmpty(Address))
                 throw new ArgumentNullException($"the passed address is empty or null {nameof(ConfigureServer)}");
 
-            var server = ServerInstance.getServerInstance(Address);
-            server.AddWebSocketService<ProtoWebsocketBehavior>("/test");
+            var server = new WebSocketServer(Address);
+            server.AddWebSocketService<ProtoWebsocketBehavior>(Path);
             server.KeepClean = false; //doesnt kill in active sessions
+
+            if (server.WebSocketServices.TryGetServiceHost(Path,out var host))
+            {
+                ServerInstance.createSessionInstance(host.Sessions);
+            }
+           
+
             return server;
         }
     }

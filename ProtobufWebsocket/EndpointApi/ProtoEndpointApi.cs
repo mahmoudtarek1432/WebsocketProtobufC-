@@ -1,5 +1,6 @@
 ﻿using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Broadcast_Helper;
+using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.EndpointHelper;
 using ProtobufWebsocket.Protobuf_Helper;
 using ProtobufWebsocket.RequestMapping;
@@ -15,13 +16,18 @@ namespace ProtobufWebsocket.EndpointApi
     {
         public static byte[] ResolveRequest(byte[] incomingBytes, string userId)//service provider instance that is passed from the application builder context
         {
-            List<(object request, EndpointTypeProperties endpointProp)> CalledEndpoint = EndpointHelper.EndpointHelper.getAssociatedEndpoints(incomingBytes);
+            var requestEndpointType = EndpointsTypeProvider.getRequestInstance();
 
-            List<(object requestObject, object EndpointObject)> endpoints = CalledEndpoint.Select(E =>
-            {
+            var RequestEndpointObject = ProtobufAccessHelper.Decode(requestEndpointType, incomingBytes); //class includes list of objects of extended type irequest
+
+            List<(object request, EndpointTypeProperties endpointProp)> CalledEndpoint = EndpointHelper.EndpointHelper.getAssociatedEndpoint(RequestEndpointObject);
+
+            List<(object requestObject, object EndpointObject)> endpoints = CalledEndpoint.Select(E => {
                 return (E.request, EndpointHelper.EndpointHelper.prepareEndpointObject(E.endpointProp));
             }).ToList();
-            var encoded = new byte[] { };
+
+            byte[] encoded = null;
+
             foreach (var resolve in endpoints)
             {
                 if (EndpointHelper.EndpointHelper.CheckIfBroadcast(resolve.requestObject))
@@ -34,13 +40,7 @@ namespace ProtobufWebsocket.EndpointApi
                 var endpointWithUID = EndpointHelper.EndpointHelper.PassUserId(resolve.EndpointObject, userId);
                 var requestObject = resolve.requestObject;
 
-                var handlerReturnObject = EndpointHelper.EndpointHelper.InvokeHandler(requestObject, endpointWithUID); //returns a task<object>
-                var invokeReturnType = AssemblyHelper.resolveTask(handlerReturnObject);
-                //serialize and return to user
-
-                var responseEndpoint = ProtobufAccessHelper.fillEndpoint(invokeReturnType, null); //second param to create a new endpoint
-
-                encoded = ProtobufAccessHelper.Encode(responseEndpoint);
+                encoded = EndpointHelper.EndpointHelper.handle(endpointWithUID, requestObject);
 
 
             }

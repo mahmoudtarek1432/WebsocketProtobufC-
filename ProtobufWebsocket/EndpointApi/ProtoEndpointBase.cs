@@ -17,8 +17,9 @@ namespace ProtobufWebsocket.EndpointApi
             internal abstract class WithResponse<T> : IDynamicEndpoint  where T : IResponse 
             {
                 public readonly string UserId; //binds the incoming websocket id
-
+                
                 public abstract Task<T> Handle(R Request);
+
             }
         }
 

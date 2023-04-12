@@ -1,4 +1,5 @@
 ﻿using ProtobufWebsocket.EndpointHelper;
+using ProtobufWebsocket.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace ProtobufWebsocket.Broadcast_Helper
         /**
          * Sends all the subscribed users a response, triggered by the server
          */
-        public void EndpointBroadCast<EndpointHandler>(EndpointHandler handler) where EndpointHandler : IDynamicEndpoint;
+        public void EndpointBroadCast<Request>(Request request) where Request : IRequest;
     }
 }

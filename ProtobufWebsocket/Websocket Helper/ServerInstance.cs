@@ -9,17 +9,20 @@ namespace ProtobufWebsocket.Websocket_Helper
 {
     internal class ServerInstance
     {
-        static WebSocketServer _server { get; set; }
+        static WebSocketSessionManager _Session { get; set; }
 
-        public static WebSocketServer getServerInstance(string address = null)
+        public static WebSocketSessionManager getSessionInstance()
         {
-            if(_server == null)
+            if(_Session == null)
             {
-                _server = (address == null)? new WebSocketServer() : new WebSocketServer(address);
-
-                return _server;
+                throw new ArgumentNullException();
             }
-            return _server;
+            return _Session;
+        }
+
+        public static void createSessionInstance(WebSocketSessionManager session)
+        {
+            _Session = session;
         }
     }
 }

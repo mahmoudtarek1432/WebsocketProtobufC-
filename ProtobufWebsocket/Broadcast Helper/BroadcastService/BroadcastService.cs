@@ -1,23 +1,50 @@
 ﻿using ProtobufWebsocket.Broadcast_Helper;
+using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.EndpointHelper;
+using ProtobufWebsocket.Model;
+using ProtobufWebsocket.RequestMapping;
 using ProtobufWebsocket.Websocket_Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ProtobufWebsocket.Broadcast_Helper
 {
     internal class BroadcastService : IBroadcastService
     {
-        public void EndpointBroadCast<EndpointHandler>(EndpointHandler handler) where EndpointHandler : IDynamicEndpoint
+        //class gets triggered from user assembly so no need for reflection
+        public void EndpointBroadCast<Request>(Request request) where Request : IRequest
         {
-            var endpointusers = broadcastDictionaryProvider.GetEndpointUsers(handler.GetType().Name);
 
-            var server = ServerInstance.getServerInstance();
+            var endpointProperties = RequestMappingHelper.GetEndpoint(request.GetType());
 
-           
+            var endpointusers = broadcastDictionaryProvider.GetEndpointUsers(endpointProperties.EndpointType.GetType().Name);
+
+            var endpointConstructorParams = endpointProperties.EndpointConstructorParams.Select(DependencyInjectionHelper.IntializeWithDI);
+
+            var endpointObject = Activator.CreateInstance(endpointProperties.EndpointType, endpointConstructorParams);
+
+            //endpoint is not uniquely identified, user id will be 0
+            endpointObject = EndpointHelper.EndpointHelper.PassUserId(endpointObject, "broadcast");
+            EndpointHelper.EndpointHelper.handle(endpointObject, request);
+
+            var sessions = ServerInstance.getSessionInstance();
+
+            //invoke handler
+
+            ThreadPool.QueueUserWorkItem(delegate
+            {
+                //potential problem with write requests
+                foreach (var userId in endpointusers)
+                {
+                    sessions[userId].Context.WebSocket.SendAsync(new byte[] { }, (b) => Console.Write("BroadCastSent"));
+                }
+            });
         }
     }
 }

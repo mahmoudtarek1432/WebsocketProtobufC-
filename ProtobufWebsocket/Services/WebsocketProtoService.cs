@@ -12,14 +12,18 @@ using Microsoft.AspNetCore.Builder;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using ProtobufWebsocket.Broadcast_Helper;
 
 namespace ProtobufWebsocket.Services
 {
     public static class WebsocketProtoService
     {
-        public static void AddProtoWebsocketService(this IServiceCollection Service, string address, System.Reflection.Assembly assembly)
+        public static void AddProtoWebsocketService(this IServiceCollection Services, string address, string path, System.Reflection.Assembly assembly)
         {
-            UseProtoWebsocketServiceDI(Service.BuildServiceProvider());
+            Services.AddSingleton<IBroadcastService, BroadcastService>(); 
+
+            var ServiceProvider = Services.BuildServiceProvider();
+            UseProtoWebsocketServiceDI(ServiceProvider);
             //fetch for types accross the running code with attribute names given
             ProtobufCreationHelper.IntializeProtoEnvironment("endpoint", assembly);
 
@@ -27,9 +31,10 @@ namespace ProtobufWebsocket.Services
             EndpointHelper.EndpointHelper.PrepareEndpointHandlers(assembly);
 
             //start protoservice
-            var server = WebsocketBuilder.ConfigureServer(address);
+            var server = WebsocketBuilder.ConfigureServer(address,path);
            
             server.Start();
+
         }
 
         public static void UseProtoWebsocketServiceDI(this IServiceProvider serviceProvider)
