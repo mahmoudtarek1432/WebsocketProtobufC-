@@ -23,6 +23,7 @@ namespace ProtobufWebsocket.Websocket_Helper
 
             var server = ServerInstance.getServerInstance(Address);
             server.AddWebSocketService<ProtoWebsocketBehavior>("/test");
+            server.KeepClean = false; //doesnt kill in active sessions
             return server;
         }
     }

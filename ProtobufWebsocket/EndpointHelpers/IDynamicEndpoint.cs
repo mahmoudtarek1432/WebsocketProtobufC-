@@ -12,7 +12,7 @@ namespace ProtobufWebsocket.EndpointHelper
      * 
      * 
      */
-    internal interface IDynamicEndpoint
+    public interface IDynamicEndpoint
     {
     }
 }
