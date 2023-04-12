@@ -22,11 +22,14 @@ var Reqlist = new List<product>();
 Reqlist.Add(new product { Name = "hello" });
 
 var Reslist = new List<ProductResponse>();
+var Reslistclone = new List<ProductResponseClone>();
 Reslist.Add(new ProductResponse { Description = "hello" });
+Reslistclone.Add(new ProductResponseClone { Description = "hello from clone" });
 
 var x = new RequestEndpoint { product = Reqlist };
-var z = new ResponseEndpoint { ProductResponse = Reslist };
+var z = new ResponseEndpoint { ProductResponse = Reslist, ProductResponseClone = Reslistclone };
 
+var c = ProtoBuf.Meta.RuntimeTypeModel.Default.GetSchema(typeof(ResponseEndpoint));
 
 var v = ProtobufAccessHelper.Encode(z);
 var d = ProtobufAccessHelper.Decode(x.GetType(), v);
