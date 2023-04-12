@@ -8,56 +8,29 @@ using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.EndpointApi;
 using ProtobufWebsocket.EndpointHelper;
+using ProtobufWebsocket.Model;
 using ProtobufWebsocket.Protobuf_Helper;
 using ProtobufWebsocket.Services;
-using ProtobufWebsocket.TestModels;
+using ProtobufWebsocket.TestServices;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
+using System.Text.Json;
 
+Host.CreateDefaultBuilder(args).ConfigureServices(s =>
+{
+    s.AddTransient<INameingService, NamingService>();
+    s.AddProtoWebsocketService("ws://127.0.0.1/", Assembly.GetExecutingAssembly());
+}).Build();
 
-var Reqlist = new List<product>();
-Reqlist.Add(new product { Name = "hello" });
+Console.ReadLine();
+//WebsocketProtoService.AddProtoWebsocketService()
 
-var Reslist = new List<ProductResponse>();
-var Reslistclone = new List<ProductResponseClone>();
-Reslist.Add(new ProductResponse { Description = "hello" });
-Reslistclone.Add(new ProductResponseClone { Description = "hello from clone" });
-
-var x = new RequestEndpoint { product = Reqlist };
-var z = new ResponseEndpoint { ProductResponse = Reslist, ProductResponseClone = Reslistclone };
-
-var c = ProtoBuf.Meta.RuntimeTypeModel.Default.GetSchema(typeof(ResponseEndpoint));
-
-var v = ProtobufAccessHelper.Encode(z);
-var d = ProtobufAccessHelper.Decode(x.GetType(), v);
-Console.WriteLine();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*var a = Assembly.GetExecutingAssembly();
+/*
+var a = Assembly.GetExecutingAssembly();
 
 
 var product = new ProductResponse() { Name = "name", Description = "desc", Price = 5 };
@@ -90,12 +63,19 @@ var end = typeof(ProtoEndpointBase.Request<product>.WithResponse<ProductResponse
 EndpointHelper.ResolveRequest(serialized,"1");
 
 Console.WriteLine();
-
+*/
 class testendpoint : ProtoEndpointBase.Request<product>.WithResponse<ProductResponse>
 {
+    private readonly INameingService _nameingService;
+
+    public testendpoint(INameingService name)
+    {
+        _nameingService = name;
+    }
     public override async Task<ProductResponse> Handle(product Request)
     {
-        Console.WriteLine("ITS ALIVE !!!!");
-        return new ProductResponse() { Name = "name", Description = "desc", Price = 5 };
+        Console.WriteLine("ITS ALIVE !!!! my ID is "+UserId);
+        var pr = new ProductResponse() { Name = _nameingService.GetnameCongrats("mahmoud"), Description = "this was returned from the response handler", Price = 100000 };
+        return pr;
     }
-}*/
+}

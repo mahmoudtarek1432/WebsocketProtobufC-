@@ -22,7 +22,7 @@ namespace ProtobufWebsocket.Websocket_Helper
                 throw new ArgumentNullException($"the passed address is empty or null {nameof(ConfigureServer)}");
 
             var server = ServerInstance.getServerInstance(Address);
-            server.AddWebSocketService<ProtoWebsocketBehavior>("");
+            server.AddWebSocketService<ProtoWebsocketBehavior>("/test");
             return server;
         }
     }

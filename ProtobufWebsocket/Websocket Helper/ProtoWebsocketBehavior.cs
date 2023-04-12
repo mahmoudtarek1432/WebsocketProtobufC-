@@ -16,13 +16,15 @@ namespace ProtobufWebsocket.Websocket_Helper
     {
         protected override void OnOpen()
         {
-            
+            Console.WriteLine($"socket started with id:{ID}");
             base.OnOpen();
         }
 
         protected override void OnMessage(MessageEventArgs e)
         {
-            var responseObject = ProtoEndpointApi.ResolveRequest(e.RawData, ID);
+            var bytes = new byte[] { 10, 16, 10, 4, 100, 97, 109, 101, 18, 4, 100, 101, 115, 99, 26, 2, 8, 5 };
+            //Console.WriteLine($"message recieved from user {ID}: {e.Data}");
+            var responseObject = ProtoEndpointApi.ResolveRequest(bytes, ID);
             Send(responseObject);
             base.OnMessage(e);
         }

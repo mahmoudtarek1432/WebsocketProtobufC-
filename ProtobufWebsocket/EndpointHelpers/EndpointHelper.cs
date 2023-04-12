@@ -169,7 +169,7 @@ namespace ProtobufWebsocket.EndpointHelper
         public static object PassUserId(object endpoint, string UserId)
         {
             var endpointType = endpoint.GetType();
-            var field = endpointType.GetField("userGUID");
+            var field = endpointType.GetField("UserId");
 
             if (field == null)
                 throw new Exception($"field userGUID is not present in {endpointType.FullName}");
