@@ -18,11 +18,25 @@ namespace ProtobufWebsocket.Services
 {
     public static class WebsocketProtoService
     {
-        public static void AddProtoWebsocketService(this IServiceCollection Services, string address, string path, System.Reflection.Assembly assembly)
+        /**
+         * <summary> Adds ProtoWesocketService to the Host services specified in
+         * <see cref="IServiceCollection"/> and starts up the connection.
+         * Notice: add DI services prior to adding this service.
+           </summary>
+           <typeparam name="address">The type of the service to add.</typeparam>
+           <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
+        <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
+        <param name="address">The Websocket address clients shall connect to. For example: ws://127.0.0.1:80</param>
+        <param name="path">The servicePath</param>
+        <param name="assembly">The excuting in code assemblies. </param>
+        
+           <returns>A reference to this instance after the operation has completed.</returns>
+         */
+        public static IServiceCollection AddProtoWebsocketService(this IServiceCollection services, System.Reflection.Assembly assembly,string address, string path="/proto")
         {
-            Services.AddSingleton<IBroadcastService, BroadcastService>(); 
+            services.AddSingleton<IBroadcastService, BroadcastService>(); 
 
-            var ServiceProvider = Services.BuildServiceProvider();
+            var ServiceProvider = services.BuildServiceProvider();
             UseProtoWebsocketServiceDI(ServiceProvider);
             //fetch for types accross the running code with attribute names given
             ProtobufCreationHelper.IntializeProtoEnvironment("endpoint", assembly);
@@ -35,6 +49,7 @@ namespace ProtobufWebsocket.Services
            
             server.Start();
 
+            return services;
         }
 
         public static void UseProtoWebsocketServiceDI(this IServiceProvider serviceProvider)

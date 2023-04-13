@@ -7,16 +7,15 @@ using System.Threading.Tasks;
 
 namespace ProtobufWebsocket.Broadcast_Helper
 {
-    internal class broadcastDictionaryProvider
+    internal class BroadcastDictionaryProvider
     {
         private static Dictionary<string, List<string>> _dictionary; //key is the endpoint's name and the list contains the websockets subscribed on broadcast
 
         public static void CreateNewDictionaryInstance(string key)
         {
-            if (_dictionary == null)
-            {
-                _dictionary = new Dictionary<string, List<string>>();
-            }
+
+            _dictionary ??= new Dictionary<string, List<string>>();
+            
             if (_dictionary.TryGetValue(key, out _)) // if true key is not valid
                 throw new Exception("endpoint is already registered");
             

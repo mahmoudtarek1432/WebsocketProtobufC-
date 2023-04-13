@@ -7,14 +7,7 @@ using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.Model;
 using ProtobufWebsocket.Protobuf_Helper;
 using ProtobufWebsocket.RequestMapping;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ProtobufWebsocket.EndpointHelper
 {
@@ -35,7 +28,7 @@ namespace ProtobufWebsocket.EndpointHelper
                 if (Requesttype != null)
                 {
                     RequestMappingHelper.MapRequestToEndpoint(Requesttype!, handler);      //maps an endpoint to a request
-                    broadcastDictionaryProvider.CreateNewDictionaryInstance(handler.Name); //intialize an endpoint dictionary
+                    BroadcastDictionaryProvider.CreateNewDictionaryInstance(handler.Name); //intialize an endpoint dictionary
                 }
             }
 
@@ -48,25 +41,25 @@ namespace ProtobufWebsocket.EndpointHelper
 
             var RequestEndpointObject = ProtobufAccessHelper.Decode(requestEndpointType, incomingBytes); //class includes list of objects of extended type irequest
 
-            List<(object request, EndpointTypeProperties endpointProp)> CalledEndpoint = getAssociatedEndpoint(RequestEndpointObject);
+            List<(object request, EndpointTypeProperties endpointProp)> CalledEndpoint = GetAssociatedEndpoint(RequestEndpointObject);
 
             List<(object requestObject, object EndpointObject)> endpoints = CalledEndpoint.Select( E => {
-                                                                                            return (E.request, prepareEndpointObject(E.endpointProp));
+                                                                                            return (E.request, PrepareEndpointObject(E.endpointProp));
                                                                                         }).ToList();
-            var encoded = new byte[] { };
+            var encoded = Array.Empty<byte>();
             foreach (var resolve in endpoints)
             {
                 if (CheckIfBroadcast(resolve.requestObject))
                 {
                     var endpointType = resolve.EndpointObject.GetType();
-                    broadcastDictionaryProvider.AddUserToEndpoint(endpointType.Name, userId);
+                    BroadcastDictionaryProvider.AddUserToEndpoint(endpointType.Name, userId);
                 }
                 //ask about it 
 
                 var endpointWithUID =  PassUserId(resolve.EndpointObject, userId);
                 var requestObject = resolve.requestObject;
 
-                handle(endpointWithUID, requestObject);
+                Handle(endpointWithUID, requestObject);
             }
 
             return encoded;
@@ -74,7 +67,7 @@ namespace ProtobufWebsocket.EndpointHelper
         }
 
         //gets called each time a message is recieved, invokes the appropriate endpoint 
-        internal static List<(object request, EndpointTypeProperties endpointProp)> getAssociatedEndpoint(object RequestObject)
+        internal static List<(object request, EndpointTypeProperties endpointProp)> GetAssociatedEndpoint(object RequestObject)
         {
 
             var EndpointList = new List<(object request, EndpointTypeProperties endpointProp)>(); //list of tuple that takes a request and endpoint
@@ -101,7 +94,7 @@ namespace ProtobufWebsocket.EndpointHelper
         }
 
         //intializes an endpoint along with its constructor parameters
-        internal static object prepareEndpointObject(EndpointTypeProperties endpoint) //endpopint is created, dependencies resolved.
+        internal static object PrepareEndpointObject(EndpointTypeProperties endpoint) //endpopint is created, dependencies resolved.
         {
 
             //an array of objects is constructed using dependency injection
@@ -153,15 +146,14 @@ namespace ProtobufWebsocket.EndpointHelper
             var endpointHandlerType = EndpointObject.GetType();
             var handleDelegate = endpointHandlerType.GetMethod("Handle");
 
-            return handleDelegate.Invoke(EndpointObject, new object[] { })!; //second argument is the request object
+            return handleDelegate.Invoke(EndpointObject, Array.Empty<object>())!; //second argument is the request object
         }
 
         //checks if the passed object that inherets IRequest is a broadcast subscription request
         internal static bool CheckIfBroadcast(object Request)
         {
-            var cr = new checkRequest();
 
-            var Is_subscribeField = Request.GetType().GetRuntimeField(nameof(cr.is_subscribe));
+            var Is_subscribeField = Request.GetType().GetRuntimeField("is_subscribe");
 
             return (bool) Is_subscribeField!.GetValue(Request)!;
 
@@ -180,7 +172,7 @@ namespace ProtobufWebsocket.EndpointHelper
             return endpoint;
         }
 
-        public static byte[] handle(object EndpointObject, object requestObject)
+        public static byte[] Handle(object EndpointObject, object requestObject)
         {
            
             var handlerReturnObject = InvokeHandler(requestObject, EndpointObject); //returns a task<object>

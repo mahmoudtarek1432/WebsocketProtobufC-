@@ -32,11 +32,11 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
             });
         }
 
-        public Task SendNotification<T>( IEnumerable<string> Id) where T : class, IDynamicEndpoint
+        public Task SendNotification<T>( IEnumerable<string> Id) where T : class, INotificationEndpoint
         {
             return new Task(delegate
                 {
-                    var sessions = getSessionList(Id);
+                    var sessions = GetSessionList(Id);
 
                     var x = typeof(T);
 
@@ -55,7 +55,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
                 });
         }
 
-        private IEnumerable<IWebSocketSession> getSessionList(IEnumerable<string> Ids = null)
+        private static IEnumerable<IWebSocketSession> GetSessionList(IEnumerable<string> Ids = null)
         {
             var sessions = SessionInstance.getSessionManagerInstance();
             var filtered = new List<IWebSocketSession>();

@@ -24,10 +24,10 @@ using System.Text.Json;
 Host.CreateDefaultBuilder(args).ConfigureServices(s =>
 {
     s.AddTransient<INameingService, NamingService>();
-    s.AddProtoWebsocketService("ws://127.0.0.1/","/test", Assembly.GetExecutingAssembly());
+    s.AddProtoWebsocketService(Assembly.GetExecutingAssembly(),"ws://127.0.0.1/","/test");
 }).Build();
 
-new NotificationService().SendNotification<testNotifications>();
+new NotificationService().SendNotification<TestNotifications>();
 
 Console.ReadLine();
 //WebsocketProtoService.AddProtoWebsocketService()
@@ -83,11 +83,11 @@ class testendpoint : ProtoEndpointBase.Request<product>.WithResponse<ProductResp
     }
 }
 
-class testNotifications : ProtoEndpointBase.Notification<ProductResponse>
+class TestNotifications : ProtoEndpointBase.Notification<ProductResponse>
 {
     private readonly INameingService _nameingService;
 
-    public testNotifications(INameingService name)
+    public TestNotifications(INameingService name)
     {
         _nameingService = name;
     }

@@ -9,7 +9,7 @@ namespace TestPackage.Services
 {
     internal interface IWeatherService
     {
-        public WeatherResponse getService(WeatherRequest weather);
+        public WeatherResponse GetService(WeatherRequest weather);
 
         public void NotifyWeatherChange();
     }

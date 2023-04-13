@@ -7,8 +7,11 @@ using TestPackage.Services;
 
 Console.WriteLine("Hello, World!");
 
-Host.CreateDefaultBuilder().ConfigureServices(s =>
+var builder = Host.CreateDefaultBuilder();
+
+builder.ConfigureServices(s =>
 {
     s.AddSingleton<IWeatherService, WeatherService>();
-    s.AddProtoWebsocketService("ws://127.0.0.1/", "/test", Assembly.GetExecutingAssembly());
-}).Build();
+    s.AddProtoWebsocketService(Assembly.GetExecutingAssembly(), "ws://127.0.0.1/", "/test");
+});
+

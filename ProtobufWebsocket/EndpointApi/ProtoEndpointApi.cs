@@ -20,10 +20,10 @@ namespace ProtobufWebsocket.EndpointApi
 
             var RequestEndpointObject = ProtobufAccessHelper.Decode(requestEndpointType, incomingBytes); //class includes list of objects of extended type irequest
 
-            List<(object request, EndpointTypeProperties endpointProp)> CalledEndpoint = EndpointHelper.EndpointHelper.getAssociatedEndpoint(RequestEndpointObject);
+            List<(object request, EndpointTypeProperties endpointProp)> CalledEndpoint = EndpointHelper.EndpointHelper.GetAssociatedEndpoint(RequestEndpointObject);
 
             List<(object requestObject, object EndpointObject)> endpoints = CalledEndpoint.Select(E => {
-                return (E.request, EndpointHelper.EndpointHelper.prepareEndpointObject(E.endpointProp));
+                return (E.request, EndpointHelper.EndpointHelper.PrepareEndpointObject(E.endpointProp));
             }).ToList();
 
             byte[] encoded = null;
@@ -33,14 +33,14 @@ namespace ProtobufWebsocket.EndpointApi
                 if (EndpointHelper.EndpointHelper.CheckIfBroadcast(resolve.requestObject))
                 {
                     var endpointType = resolve.EndpointObject.GetType();
-                    broadcastDictionaryProvider.AddUserToEndpoint(endpointType.Name, userId);
+                    BroadcastDictionaryProvider.AddUserToEndpoint(endpointType.Name, userId);
                 }
                 //ask about it 
 
                 var endpointWithUID = EndpointHelper.EndpointHelper.PassUserId(resolve.EndpointObject, userId);
                 var requestObject = resolve.requestObject;
 
-                encoded = EndpointHelper.EndpointHelper.handle(endpointWithUID, requestObject);
+                encoded = EndpointHelper.EndpointHelper.Handle(endpointWithUID, requestObject);
 
 
             }
