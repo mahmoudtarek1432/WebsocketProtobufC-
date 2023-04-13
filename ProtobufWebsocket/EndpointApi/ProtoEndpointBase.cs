@@ -13,9 +13,9 @@ namespace ProtobufWebsocket.EndpointApi
 {
     public static class ProtoEndpointBase
     {
-        internal class Request<R> where R : IRequest
+        public static class Request<R> where R : IRequest
         {
-            internal abstract class WithResponse<T> : IDynamicEndpoint  where T : IResponse 
+            public abstract class WithResponse<T> : IDynamicEndpoint  where T : IResponse 
             {
                 public readonly string UserId; //binds the incoming websocket id
                 
@@ -24,7 +24,7 @@ namespace ProtobufWebsocket.EndpointApi
             }
         }
 
-        internal abstract class Notification<Response> : INotificationEndpoint , IDynamicEndpoint where Response : IResponse
+        public abstract class Notification<Response> : INotificationEndpoint , IDynamicEndpoint where Response : IResponse
         {
             public abstract Task<Response> Handle();
 

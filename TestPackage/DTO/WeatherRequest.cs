@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProtobufWebsocket.EndpointHelpers
+namespace TestPackage.Models
 {
-    public interface INotificationEndpoint
+    internal class WeatherRequest
     {
     }
 }

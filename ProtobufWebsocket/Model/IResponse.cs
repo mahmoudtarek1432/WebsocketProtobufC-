@@ -9,7 +9,7 @@ namespace ProtobufWebsocket.Model
 {
     public abstract class IResponse : ISerializable
     {
-        public string? requestId { get; }
+        public int? requestId { get; set; }
 
         public ResultCode? resultCode { get; set; }
 
