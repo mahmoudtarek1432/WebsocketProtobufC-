@@ -41,8 +41,6 @@ namespace ProtobufWebsocket.EndpointApi
                 var requestObject = resolve.requestObject;
 
                 encoded = EndpointHelper.EndpointHelper.Handle(endpointWithUID, requestObject);
-
-
             }
 
             return encoded;

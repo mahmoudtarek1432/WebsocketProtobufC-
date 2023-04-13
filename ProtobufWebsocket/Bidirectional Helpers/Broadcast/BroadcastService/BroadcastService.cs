@@ -23,7 +23,7 @@ namespace ProtobufWebsocket.Broadcast_Helper
 
             var endpointProperties = RequestMappingHelper.GetEndpoint(request.GetType());
 
-            var endpointusers = broadcastDictionaryProvider.GetEndpointUsers(endpointProperties.EndpointType.GetType().Name);
+            var endpointusers = BroadcastDictionaryProvider.GetEndpointUsers(endpointProperties.EndpointType.GetType().Name);
 
             var endpointConstructorParams = endpointProperties.EndpointConstructorParams.Select(DependencyInjectionHelper.IntializeWithDI);
 
@@ -31,7 +31,7 @@ namespace ProtobufWebsocket.Broadcast_Helper
 
             //endpoint is not uniquely identified, user id will be 0
             endpointObject = EndpointHelper.EndpointHelper.PassUserId(endpointObject, "broadcast");
-            EndpointHelper.EndpointHelper.handle(endpointObject, request);
+            EndpointHelper.EndpointHelper.Handle(endpointObject, request);
 
             var sessions = SessionInstance.getSessionManagerInstance();
 
@@ -42,7 +42,7 @@ namespace ProtobufWebsocket.Broadcast_Helper
                     foreach (var userId in endpointusers)
                 {
                     endpointObject = EndpointHelper.EndpointHelper.PassUserId(endpointObject, userId);
-                    var sentbytes = EndpointHelper.EndpointHelper.handle(endpointObject, request);
+                    var sentbytes = EndpointHelper.EndpointHelper.Handle(endpointObject, request);
                     sessions[userId].Context.WebSocket.SendAsync(sentbytes, (b) => Console.Write("BroadCastSent"));
                 }
             });

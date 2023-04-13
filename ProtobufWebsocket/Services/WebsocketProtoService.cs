@@ -27,7 +27,7 @@ namespace ProtobufWebsocket.Services
            <typeparam name="TImplementation">The type of the implementation to use.</typeparam>
         <param name="services">The <see cref="IServiceCollection"/> to add the service to.</param>
         <param name="address">The Websocket address clients shall connect to. For example: ws://127.0.0.1:80</param>
-        <param name="path">The servicePath</param>
+        <param name="path">The path service will connect do, the default path is "/proto".</param>
         <param name="assembly">The excuting in code assemblies. </param>
         
            <returns>A reference to this instance after the operation has completed.</returns>

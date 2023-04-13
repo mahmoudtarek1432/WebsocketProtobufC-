@@ -19,7 +19,7 @@ namespace TestPackage.Services
         public WeatherResponse GetService(WeatherRequest weather)
         {
             Console.WriteLine("Database query");
-            return new WeatherResponse { requestId = weather.request_id, name = "DatabaseName", temp = 100 };
+            return new WeatherResponse { request_id = weather.request_id, name = "DatabaseName", temp = 100 };
         }
 
         public void NotifyWeatherChange()
