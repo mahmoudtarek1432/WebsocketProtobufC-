@@ -65,7 +65,6 @@ namespace ProtobufWebsocket.EndpointHelper
         //intializes an endpoint along with its constructor parameters
         internal static object PrepareEndpointObject(EndpointTypeProperties endpoint) //endpopint is created, dependencies resolved.
         {
-
             //an array of objects is constructed using dependency injection
             var constructorObjects = new List<object>();
 
@@ -150,17 +149,12 @@ namespace ProtobufWebsocket.EndpointHelper
             return Response;
         }
 
-        public static byte[] Handle(object EndpointObject, object requestObject)
+        public static object Handle(object EndpointObject, object requestObject)
         {
              var handlerReturnObject = InvokeHandler(requestObject, EndpointObject); //returns a task<object>
             
             var invokeReturnType = AssemblyHelper.resolveTask(handlerReturnObject);
-            invokeReturnType = PassResponseTheRequestId(requestObject, invokeReturnType);
-            //serialize and return to user
-
-            var responseEndpoint = ProtobufAccessHelper.fillEndpoint(invokeReturnType, null); //second param to create a new endpoint
-
-            return ProtobufAccessHelper.Encode(responseEndpoint);
+            return invokeReturnType;
         }
     }
 }

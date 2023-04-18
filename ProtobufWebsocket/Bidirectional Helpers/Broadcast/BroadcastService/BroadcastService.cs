@@ -2,6 +2,7 @@
 using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.EndpointHelper;
 using ProtobufWebsocket.Model;
+using ProtobufWebsocket.Protobuf_Helper;
 using ProtobufWebsocket.RequestMapping;
 using ProtobufWebsocket.Websocket_Helper;
 using System;
@@ -31,7 +32,12 @@ namespace ProtobufWebsocket.Broadcast_Helper
 
             //endpoint is not uniquely identified, user id will be 0
             endpointObject = EndpointHelper.EndpointHelper.PassUserId(endpointObject, "broadcast");
-            EndpointHelper.EndpointHelper.Handle(endpointObject, request);
+
+            var handleReturn = EndpointHelper.EndpointHelper.Handle(endpointObject, request);
+
+            var responseEndpoint = ProtobufAccessHelper.fillEndpoint(handleReturn, null); //second param to create a new endpoint
+
+            var sentbytes =  ProtobufAccessHelper.Encode(responseEndpoint);
 
             var sessions = SessionInstance.getSessionManagerInstance();
 
@@ -41,8 +47,6 @@ namespace ProtobufWebsocket.Broadcast_Helper
                     //potential problem with write requests
                     foreach (var userId in endpointusers)
                 {
-                    endpointObject = EndpointHelper.EndpointHelper.PassUserId(endpointObject, userId);
-                    var sentbytes = EndpointHelper.EndpointHelper.Handle(endpointObject, request);
                     sessions[userId].Context.WebSocket.SendAsync(sentbytes, (b) => Console.Write("BroadCastSent"));
                 }
             });

@@ -22,9 +22,17 @@ namespace ProtobufWebsocket.Broadcast_Helper
             _dictionary.Add(key, new List<string>());
         }
 
-        public static void AddUserToEndpoint(string endpointKey, string UserGuid)
+        /**
+         * append subscribers. true if successful, false if not successful.
+         */
+        public static bool AddUserToEndpoint(string endpointKey, string UserGuid)
         {
-            _dictionary[endpointKey].Add(UserGuid);
+            if (!_dictionary[endpointKey].Contains(UserGuid)) //user is not subscribed
+            {
+                _dictionary[endpointKey].Add(UserGuid);
+                return true;
+            }
+            return false;
         }
 
         public static List<string> GetEndpointUsers(string endpointKey)

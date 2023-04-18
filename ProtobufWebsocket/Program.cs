@@ -30,6 +30,7 @@ Host.CreateDefaultBuilder(args).ConfigureServices(s =>
 new NotificationService().SendNotification<TestNotifications>();
 
 Console.ReadLine();
+
 //WebsocketProtoService.AddProtoWebsocketService()
 
 /*
@@ -78,7 +79,7 @@ class testendpoint : ProtoEndpointBase.Request<product>.WithResponse<ProductResp
     public override async Task<ProductResponse> Handle(product Request)
     {
         Console.WriteLine("ITS ALIVE !!!! my ID is "+ UserId);
-        var pr = new ProductResponse() { Name = _nameingService.GetnameCongrats("mahmoud"), Description = Request.Description, Price = 100000};
+        var pr = new ProductResponse() { Name = _nameingService.GetnameCongrats("mahmoud"), Description = Request.Description+ "and a response from the server", Price = 10};
         return pr;
     }
 }

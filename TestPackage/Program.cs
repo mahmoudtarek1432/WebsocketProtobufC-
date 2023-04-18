@@ -15,3 +15,5 @@ builder.ConfigureServices(s =>
     s.AddProtoWebsocketService(Assembly.GetExecutingAssembly(), "ws://127.0.0.1/", "/test");
 });
 
+IEnumerable<int> s = null;
+s.ToArray();

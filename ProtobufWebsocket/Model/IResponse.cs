@@ -25,7 +25,7 @@ namespace ProtobufWebsocket.Model
 
     public class Error
     {
-        public string? message { get; set; }
+        public string message { get; set; }
     }
    
 }

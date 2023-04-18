@@ -13,10 +13,6 @@ namespace ProtobufWebsocket.Model
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
-
-        public String test { get; set; }
-
-        public int test2 { get; set; }
+        public float Price { get; set; }
     }
 }

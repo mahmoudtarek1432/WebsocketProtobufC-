@@ -17,7 +17,7 @@ namespace ProtobufWebsocket.Assembly_Helpers
             var arrayType = array.GetType();
             if (!array.GetType().IsArray)
                 throw new Exception($"The passed is object is not an instance of Type Array {nameof(GetRuntimeArrayLength)}");
-
+            var name = arrayType.GetElementType()!.Name;
             if (!(arrayType.GetElementType()!.Name == ToGetAppended.GetType().Name)) //element type and object are not the same
                 throw new Exception($"array and object are not of the same type (Reflection), thrown at {nameof(AppendDynamicArray)}");
 
@@ -37,9 +37,24 @@ namespace ProtobufWebsocket.Assembly_Helpers
         public static object cloneObjectValue(object emptyObj, object Origin)
         {
             var elementType = emptyObj.GetType();
+            var test = elementType.GetProperties();
             elementType.GetRuntimeFields().ToList().ForEach(e =>
             {
-                e.SetValue(emptyObj, Origin.GetType().GetProperty(e.Name).GetValue(Origin)); //searches the to be cloned object for field name and sets the element value
+                var isArray = e.FieldType.IsArray;
+                if (isArray)
+                {
+                    var RuntimeArr = (object) Array.CreateInstance(e.FieldType.GetElementType(), 1);
+                    loopRuntimeArray(Origin.GetType().GetProperty(e.Name).GetValue(Origin), (element) =>
+                    {
+                        RuntimeArr = AppendDynamicArray(RuntimeArr, element);
+                    });
+                    e.SetValue(emptyObj, RuntimeArr);
+                }
+                else
+                {
+                    e.SetValue(emptyObj, Origin.GetType().GetProperty(e.Name).GetValue(Origin)); //searches the to be cloned object for field name and sets the element value
+
+                }
             });
 
             return emptyObj;
