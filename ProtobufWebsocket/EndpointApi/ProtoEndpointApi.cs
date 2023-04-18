@@ -39,16 +39,18 @@ namespace ProtobufWebsocket.EndpointApi
 
 
                 var ResponseObject = EndpointHelper.EndpointHelper.Handle(endpointWithUID, requestObject);
+
+                EndpointHelper.EndpointHelper.PassResponseTheRequestId(requestObject, ResponseObject);
+
                 if (EndpointHelper.EndpointHelper.CheckIfBroadcast(resolve.requestObject))
                 {
                     var endpointType = resolve.EndpointObject.GetType();
                     if(!BroadcastDictionaryProvider.AddUserToEndpoint(endpointType.Name, userId))
                     {
-                        
+                        ResponseObject = addRuntimeError(ResponseObject, new Error() { message = "The client is subscribed"});
                     }
-                    ResponseObject = addRuntimeError(ResponseObject, new Error() { message = "The client is subscribed"});
-                }
 
+                }
                 var responseEndpoint = ProtobufAccessHelper.fillEndpoint(ResponseObject, null); //second param to create a new endpoint
 
                 encoded=  ProtobufAccessHelper.Encode(responseEndpoint);

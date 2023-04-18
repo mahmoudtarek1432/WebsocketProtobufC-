@@ -44,11 +44,16 @@ namespace ProtobufWebsocket.Assembly_Helpers
                 if (isArray)
                 {
                     var RuntimeArr = (object) Array.CreateInstance(e.FieldType.GetElementType(), 1);
-                    loopRuntimeArray(Origin.GetType().GetProperty(e.Name).GetValue(Origin), (element) =>
+                    var OriginArray = Origin.GetType().GetProperty(e.Name).GetValue(Origin);
+                    if (OriginArray != null)
                     {
-                        RuntimeArr = AppendDynamicArray(RuntimeArr, element);
-                    });
-                    e.SetValue(emptyObj, RuntimeArr);
+
+                        loopRuntimeArray(OriginArray, (element) =>
+                        {
+                            RuntimeArr = AppendDynamicArray(RuntimeArr, element);
+                        });
+                        e.SetValue(emptyObj, RuntimeArr);
+                    }
                 }
                 else
                 {

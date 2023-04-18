@@ -1,0 +1,380 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ProtobufWebsocket.Assembly_Helpers.AssemblyHelper" Collapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assembly Helpers\AssemblyHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Assembly_Helpers.ProtoAssemblyBuilder" Collapsed="true">
+    <Position X="10.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAEAAAAAAAAAAAAAAAAABBAAAAAAAACAQAAAA=</HashCode>
+      <FileName>Assembly Helpers\ProtoAssemblyBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Assembly_Helpers.RuntimeArrayHelpers" Collapsed="true">
+    <Position X="19.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAEQAAEAAAAAAAAAggAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assembly Helpers\RuntimeArrayHelpers.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.AttributeHelper.AttributeHelper" Collapsed="true">
+    <Position X="14" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AttributeHelper\AttributeHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Attributes.EndpointRequestAttribute" Collapsed="true">
+    <Position X="14" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Attributes\EndpointRequestAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Attributes.EndpointResponseAttribute" Collapsed="true">
+    <Position X="15.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Attributes\EndpointResponseAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Broadcast_Helper.BroadcastService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Bidirectional Helpers\Broadcast\BroadcastService\BroadcastService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProtobufWebsocket.Broadcast_Helper.BroadcastDictionaryProvider" Collapsed="true">
+    <Position X="15.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAgAAAEAAAAACAAAAAAQA=</HashCode>
+      <FileName>Bidirectional Helpers\Broadcast\broadcastDictionaryProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Service.NotificationService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAgAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Bidirectional Helpers\Notification\Notification Service\NotificationService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProtobufWebsocket.Dependency_Injection.DependencyServices" Collapsed="true">
+    <Position X="21" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dependency Injection\Dependency Services.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Dependency_Injection.DependencyInjectionHelper" Collapsed="true">
+    <Position X="19.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dependency Injection\DependencyInjectionHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Dependency_Injection.ExcutingServiceProvider" Collapsed="true">
+    <Position X="12.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEBAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Dependency Injection\ExcutingServiceProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Endpoint_Provider.EndpointsHandleProvider" Collapsed="true">
+    <Position X="17.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAABAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Endpoint Provider\EndpointsHandleProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Endpoint_Provider.EndpointsTypeProvider" Collapsed="true">
+    <Position X="19.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAEAAACAAQAAAAAAAAAAAAAAAAAAAAAAAKAA=</HashCode>
+      <FileName>Endpoint Provider\EndpointsTypeProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.EndpointApi.ProtoEndpointApi" Collapsed="true">
+    <Position X="15.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>EndpointApi\ProtoEndpointApi.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.EndpointApi.ProtoEndpointBase" Collapsed="true">
+    <Position X="17.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EndpointApi\ProtoEndpointBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.EndpointHelper.ResponseEndpoint.ResponseEndpointHelper" Collapsed="true">
+    <Position X="17.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>EndpointHelpers\ResponseEndpoint\ResponseEndpointHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.EndpointHelper.Endpointbuilder" Collapsed="true">
+    <Position X="10.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAIBAAAAAAAAAAAAAAAAEAAAAAAAAAAAAg=</HashCode>
+      <FileName>EndpointHelpers\EndpointBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.EndpointHelper.EndpointHelper" Collapsed="true">
+    <Position X="12.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAFAAAAAAAAAAAAAAAQAAAAAEEIAAAACIAAAAIA=</HashCode>
+      <FileName>EndpointHelpers\EndpointHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Extentions.AssemblyExtentions" Collapsed="true">
+    <Position X="10.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA=</HashCode>
+      <FileName>Extentions\AssemblyExtentions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Extentions.TypeExtentions" Collapsed="true">
+    <Position X="14" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Extentions\TypeExtentions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Model.IRequest" Collapsed="true">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAABAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\IRequest.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProtobufWebsocket.Model.IResponse" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAABAAAAAgAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\IResponse.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProtobufWebsocket.Model.Error" Collapsed="true">
+    <Position X="10.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Model\IResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Model.product" Collapsed="true">
+    <Position X="8" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\product.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Model.ProductResponse" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\ProductResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Protobuf_Helper.ProtobufAccessHelper" Collapsed="true">
+    <Position X="12.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAABAAAAAAAAAAAABAAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Protobuf Helper\ProtobufAccessHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Protobuf_Helper.ProtobufCreationHelper" Collapsed="true">
+    <Position X="14" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Protobuf Helper\ProtobufCreationHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Protobuf_Helper.ReflectionHelper" Collapsed="true">
+    <Position X="21" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Protobuf Helper\ReflectionHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.RequestMapping.RequestMappingHelper" Collapsed="true">
+    <Position X="12.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>RequestMapping\RequestMappingHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.RequestMapping.RequestMapProvider" Collapsed="true">
+    <Position X="14" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>RequestMapping\RequestMapProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.RequestMapping.EndpointTypeProperties" Collapsed="true">
+    <Position X="21" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RequestMapping\RequestMapProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Services.WebsocketProtoService" Collapsed="true">
+    <Position X="17.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Services\WebsocketProtoService.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.TestModels.RequestEndpoint" Collapsed="true">
+    <Position X="10.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TestModels\RequestEndpoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.TestModels.product" Collapsed="true">
+    <Position X="17.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAgAAAAAAAAAAQAAAAAAAAIAAAAAAAAAIA=</HashCode>
+      <FileName>TestModels\RequestEndpoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.TestModels.ResponseEndpoint" Collapsed="true">
+    <Position X="15.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TestModels\ResponseEndpoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.TestModels.ProductResponse" Collapsed="true">
+    <Position X="19.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAgAAAAAAAAAAQAAAAAAAAIAAAAAAAAAIA=</HashCode>
+      <FileName>TestModels\ResponseEndpoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.TestModels.ProductResponseClone" Collapsed="true">
+    <Position X="21" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAgAAAAAAAAAAQAAAAAAAAIAAAAAAAAAIA=</HashCode>
+      <FileName>TestModels\ResponseEndpoint.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.TestServices.NamingService" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>TestServices\NamingService.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="ProtobufWebsocket.Websocket_Helper.ProtoWebsocketBehavior" Collapsed="true">
+    <Position X="19.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAABAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Websocket Helper\ProtoWebsocketBehavior.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Websocket_Helper.SessionInstance" Collapsed="true">
+    <Position X="21" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABAAAAAgAAAAAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Websocket Helper\ServerInstance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ProtobufWebsocket.Websocket_Helper.WebsocketBuilder" Collapsed="true">
+    <Position X="15.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Websocket Helper\WebsocketBuilder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="testendpoint" Collapsed="true">
+    <Position X="10.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAACAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TestNotifications" Collapsed="true">
+    <Position X="12.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAACAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="ProtobufWebsocket.Broadcast_Helper.IBroadcastService" Collapsed="true">
+    <Position X="10.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Bidirectional Helpers\Broadcast\BroadcastService\IBroadcastService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Service.INotificationService" Collapsed="true">
+    <Position X="17.5" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Bidirectional Helpers\Notification\Notification Service\INotificationService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ProtobufWebsocket.EndpointHelper.IDynamicEndpoint" Collapsed="true">
+    <Position X="12.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EndpointHelpers\IDynamicEndpoint.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ProtobufWebsocket.EndpointHelpers.INotificationEndpoint" Collapsed="true">
+    <Position X="15.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>EndpointHelpers\INotificationEndpoint.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ProtobufWebsocket.Model.ISerializable" Collapsed="true">
+    <Position X="19.25" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\ISerializable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ProtobufWebsocket.TestServices.INameingService" Collapsed="true">
+    <Position X="14" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>TestServices\INameingService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="ProtobufWebsocket.Websocket_Helper.IServerInstance" Collapsed="true">
+    <Position X="21" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Websocket Helper\IServerInstance.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="ProtobufWebsocket.Model.MethodType" Collapsed="true">
+    <Position X="10.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAIAAAAAAAAAQAAAAAAAAAAAAAgAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>Model\IRequest.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="ProtobufWebsocket.Model.ResultCode" Collapsed="true">
+    <Position X="12.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAgAAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\IResponse.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

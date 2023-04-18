@@ -97,7 +97,8 @@ namespace ProtobufWebsocket.EndpointHelper
                     var GenericTypes = BasePropertyType.GetGenericArguments();
                     foreach (var listType in GenericTypes)
                     {
-                        var listclass = buildProtoFieldType(mb, listType); //used to create a new 
+                        //recursivly fetch class and prepare internal fields
+                        var listclass = buildProtoFieldType(mb, listType);
                         var ListclassArray = Array.CreateInstance(listclass, 1);
                         return ListclassArray.GetType();
                     }

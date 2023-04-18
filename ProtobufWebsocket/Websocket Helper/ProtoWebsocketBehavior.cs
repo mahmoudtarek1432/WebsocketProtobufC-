@@ -22,9 +22,9 @@ namespace ProtobufWebsocket.Websocket_Helper
 
         protected override void OnMessage(MessageEventArgs e)
         {
-            //var bytes = new byte[] { 10, 16, 10, 4, 100, 97, 109, 101, 18, 4, 100, 101, 115, 99, 26, 2, 8, 5 };
+            var bytes = new byte[] { 10,46,10,7,109,97,104,109,111,117,100,18,24,68,101,115,99,114,105,112,116,105,111,110,58,32,102,114,111,109,32,99,108,105,101,110,116,29,0,0,160,65,32,1,40,1,48,2};
             //Console.WriteLine($"message recieved from user {ID}: {e.Data}");
-            var responseObject = ProtoEndpointApi.ResolveRequest(e.RawData, ID);
+            var responseObject = ProtoEndpointApi.ResolveRequest(bytes, ID);
             Send(responseObject);
             //Send(returnTestBytes());
             base.OnMessage(e);
