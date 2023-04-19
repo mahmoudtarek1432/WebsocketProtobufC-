@@ -1,25 +1,12 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ProtoBuf.Meta;
-using ProtobufWebsocket.Assembly_Helpers;
-using ProtobufWebsocket.Attributes;
 using ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Service;
-using ProtobufWebsocket.Dependency_Injection;
-using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.EndpointApi;
-using ProtobufWebsocket.EndpointHelper;
 using ProtobufWebsocket.Model;
-using ProtobufWebsocket.Protobuf_Helper;
 using ProtobufWebsocket.Services;
 using ProtobufWebsocket.TestServices;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Text.Json;
 
 Host.CreateDefaultBuilder(args).ConfigureServices(s =>
 {

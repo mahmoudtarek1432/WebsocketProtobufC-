@@ -109,6 +109,33 @@
   </Class>
   <Class Name="ProtobufWebsocket.EndpointApi.ProtoEndpointBase" Collapsed="true">
     <Position X="17.5" Y="3.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="ProtobufWebsocket.EndpointApi.ProtoEndpointBase.Request&lt;R&gt;">
+        <Compartments>
+          <Compartment Name="Nested Types" Collapsed="false" />
+        </Compartments>
+        <NestedTypes>
+          <Class Name="ProtobufWebsocket.EndpointApi.ProtoEndpointBase.Request&lt;R&gt;.WithResponse&lt;T&gt;" Collapsed="true">
+            <TypeIdentifier>
+              <NewMemberFileName>EndpointApi\ProtoEndpointBase.cs</NewMemberFileName>
+            </TypeIdentifier>
+            <Lollipop Position="0.2" />
+          </Class>
+        </NestedTypes>
+        <TypeIdentifier>
+          <NewMemberFileName>EndpointApi\ProtoEndpointBase.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ProtobufWebsocket.EndpointApi.ProtoEndpointBase.Notification&lt;Response&gt;" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>EndpointApi\ProtoEndpointBase.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>EndpointApi\ProtoEndpointBase.cs</FileName>

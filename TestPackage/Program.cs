@@ -12,7 +12,7 @@ var builder = Host.CreateDefaultBuilder();
 builder.ConfigureServices(s =>
 {
     s.AddSingleton<IWeatherService, WeatherService>();
-    s.AddProtoWebsocketService(Assembly.GetExecutingAssembly(), "ws://127.0.0.1/", "/test");
+    s.AddProtoWebsocketService(Assembly.GetExecutingAssembly(), "ws://127.0.0.1", "/test");
 });
 
 IEnumerable<int> s = null;

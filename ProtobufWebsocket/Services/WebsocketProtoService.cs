@@ -1,17 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Dependency_Injection;
-using ProtobufWebsocket.EndpointHelper;
-using ProtobufWebsocket.Extentions;
 using ProtobufWebsocket.Protobuf_Helper;
 using ProtobufWebsocket.Websocket_Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Builder;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using ProtobufWebsocket.Broadcast_Helper;
 
 namespace ProtobufWebsocket.Services

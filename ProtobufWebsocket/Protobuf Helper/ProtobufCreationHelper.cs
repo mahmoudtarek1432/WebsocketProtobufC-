@@ -3,15 +3,8 @@ using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Attributes;
 using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.EndpointHelper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace ProtobufWebsocket.Protobuf_Helper
 {
