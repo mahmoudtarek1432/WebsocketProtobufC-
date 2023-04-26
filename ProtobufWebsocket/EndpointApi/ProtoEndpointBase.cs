@@ -19,14 +19,14 @@ namespace ProtobufWebsocket.EndpointApi
             {
                 public readonly string UserId; //binds the incoming websocket id
                 
-                public abstract Task<T> Handle(R Request);
+                public abstract Task<T> HandleAsync(R Request);
 
             }
         }
 
         public abstract class Notification<Response> : INotificationEndpoint , IDynamicEndpoint where Response : IResponse
         {
-            public abstract Task<Response> Handle();
+            public abstract Task<Response> HandleAsync();
 
         }
     }

@@ -15,6 +15,9 @@ namespace ProtobufWebsocket.EndpointHelper
 {
     internal class Endpointbuilder
     {
+        //creates a new type builder that is taken from a class at compile time.
+        //the type contains all the class's fields and methods, protocontract attribute is added
+        //and each field gets a protomember attribute
         public static TypeBuilder PrepareForProto((Type Class, string EndpointType) baseType, ModuleBuilder module)
         {
             TypeBuilder typebuilder = null;

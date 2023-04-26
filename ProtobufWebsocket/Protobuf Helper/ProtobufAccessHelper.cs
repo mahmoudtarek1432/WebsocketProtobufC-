@@ -55,7 +55,7 @@ namespace ProtobufWebsocket.Protobuf_Helper
                             SerializableObjectArray = Array.CreateInstance(field.FieldType.GetElementType()!, 1); // creates an array
                         }
 
-                        var AppendedArray = RuntimeArrayHelpers.AppendDynamicArray(SerializableObjectArray, endpointObject);
+                        var AppendedArray = RuntimeArrayHelpers.AppendToRuntimeArray(SerializableObjectArray, endpointObject);
 
                         field.SetValue(responseEndpoint, AppendedArray);
                     }

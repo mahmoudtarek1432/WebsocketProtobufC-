@@ -36,7 +36,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
 
         public Task SendNotification<T>( IEnumerable<string> Id) where T : class, INotificationEndpoint
         {
-            return new Task(delegate
+            return Task.Run(delegate
                 {
                     var sessions = GetSessionList(Id);
 

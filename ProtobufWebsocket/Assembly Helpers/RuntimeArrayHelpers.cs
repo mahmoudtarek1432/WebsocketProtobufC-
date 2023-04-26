@@ -11,15 +11,18 @@ namespace ProtobufWebsocket.Assembly_Helpers
 {
     internal class RuntimeArrayHelpers
     {
-        
-        public static object AppendDynamicArray(object array, object ToGetAppended)
+
+        //adds an element to an array, the ToGetAppended in this case is of class that inherits IRequest or IResponse
+        //the passed object gets cloned into a an object of a type that is associated with protocontract attributs
+        //then the values are cloned to the runtime created type
+        public static object AppendToRuntimeArray(object array, object ToGetAppended)
         {
             var arrayType = array.GetType();
             if (!array.GetType().IsArray)
                 throw new Exception($"The passed is object is not an instance of Type Array {nameof(GetRuntimeArrayLength)}");
             var name = arrayType.GetElementType()!.Name;
             if (!(arrayType.GetElementType()!.Name == ToGetAppended.GetType().Name)) //element type and object are not the same
-                throw new Exception($"array and object are not of the same type (Reflection), thrown at {nameof(AppendDynamicArray)}");
+                throw new Exception($"array and object are not of the same type (Reflection), thrown at {nameof(AppendToRuntimeArray)}");
 
             var elementType = arrayType.GetElementType();                                                                               //used to Traverse inside the object
             var elementObject = Activator.CreateInstance(arrayType.GetElementType()!);
@@ -50,7 +53,7 @@ namespace ProtobufWebsocket.Assembly_Helpers
 
                         loopRuntimeArray(OriginArray, (element) =>
                         {
-                            RuntimeArr = AppendDynamicArray(RuntimeArr, element);
+                            RuntimeArr = AppendToRuntimeArray(RuntimeArr, element);
                         });
                         e.SetValue(emptyObj, RuntimeArr);
                     }

@@ -13,6 +13,10 @@ namespace ProtobufWebsocket.Assembly_Helpers
             return assembly.GetTypes();
         }
 
+        /**
+         * used to resolve runtime tasks
+         * <param name="Task">Shall be of type Task<object></param>
+         */
         public static object resolveTask(object Task)
         {
             return Task.GetType().GetProperty("Result").GetValue(Task);

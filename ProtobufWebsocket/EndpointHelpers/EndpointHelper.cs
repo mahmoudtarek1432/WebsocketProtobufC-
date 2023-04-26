@@ -14,6 +14,8 @@ namespace ProtobufWebsocket.EndpointHelper
 {
     internal class EndpointHelper
     {
+        //prepares endpoints by pairing endpoints with thier request types, this is conducted to decrease the processing at runtime,
+        //a dynamic programming approach is taken a achive so
         public static void PrepareEndpointHandlers(Assembly assembly)
         {
             var globalTypes = AssemblyHelper.loadAssemblyTypes(assembly);
@@ -97,6 +99,8 @@ namespace ProtobufWebsocket.EndpointHelper
             return staticTypeInstance;
         }
 
+        //invokes the Handle function delegate that is present in classes inheriting endpoint base abstract class
+        //handle is the fuction responsible for processing the incoming request
         internal static object InvokeHandler(object requestObject, object EndpointObject)
         {
             var endpointHandlerType = EndpointObject.GetType();
