@@ -1,4 +1,5 @@
-﻿using ProtobufWebsocket.Dependency_Injection;
+﻿using ProtobufWebsocket.Assembly_Helpers;
+using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.EndpointApi;
 using ProtobufWebsocket.EndpointHelper;
 using ProtobufWebsocket.EndpointHelpers;
@@ -18,18 +19,19 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
 {
     internal class NotificationService : INotificationService
     {
-        public Task SendNotification<T>() where T : INotificationEndpoint
+        public void SendNotification<T>() where T : INotificationEndpoint
         {
-            return new Task(delegate
-            {
-                var sessionManager = SessionInstance.getSessionManagerInstance();
+        
+            var sessionManager = SessionInstance.getSessionManagerInstance();
 
-                var notificationObject = CreateNotificationObject(typeof(T));
-                var Result = EndpointHelper.EndpointHelper.InvokeHandler(notificationObject);
-                var encode = ProtobufAccessHelper.Encode(Result);
+            var notificationObject = CreateNotificationObject(typeof(T));
+            var task = EndpointHelper.EndpointHelper.InvokeHandler(notificationObject) ;
+            var resolvedResponse = AssemblyHelper.resolveTask(task);
+            var endpoint = ProtobufAccessHelper.fillEndpoint(resolvedResponse);
+            var encode = ProtobufAccessHelper.Encode(endpoint);
 
-                sessionManager.BroadcastAsync(encode, () => Console.WriteLine(""));
-            });
+            sessionManager.BroadcastAsync(encode, () => Console.WriteLine(""));
+            
         }
 
         public Task SendNotification<T>( IEnumerable<string> Id) where T : class, INotificationEndpoint
@@ -73,9 +75,19 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
         public object CreateNotificationObject(Type type)
         {
 
-            var constructorParamTypes = type.RetriveConstructorParameters();
-            var constructorParamObjects = constructorParamTypes.Select(T => DependencyInjectionHelper.IntializeWithDI(T));
-            var notificationObject = Activator.CreateInstance(type, constructorParamObjects);
+            IEnumerable<Type> constructorParamTypes = type.RetriveConstructorParameters() as IEnumerable<Type>;
+            object notificationObject;
+            
+            if(constructorParamTypes.Count() != 0)
+            {
+                var constructorParamObjects = constructorParamTypes.Select(T => DependencyInjectionHelper.IntializeWithDI(T));
+                notificationObject = Activator.CreateInstance(type, constructorParamObjects)!;
+            }
+            else
+            {
+                notificationObject = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(type);
+            }
+            
             if (notificationObject == null)
                 throw new Exception($"notification handler creation yeilds null {nameof(SendNotification)}");
 

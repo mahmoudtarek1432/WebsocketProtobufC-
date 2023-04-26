@@ -11,9 +11,10 @@ var builder = Host.CreateDefaultBuilder();
 
 builder.ConfigureServices(s =>
 {
-    s.AddSingleton<IWeatherService, WeatherService>();
+    s.AddTransient<IWeatherService, WeatherService>();
     s.AddProtoWebsocketService(Assembly.GetExecutingAssembly(), "ws://127.0.0.1", "/test");
 });
 
-IEnumerable<int> s = null;
-s.ToArray();
+builder.Start();
+
+Console.ReadLine();

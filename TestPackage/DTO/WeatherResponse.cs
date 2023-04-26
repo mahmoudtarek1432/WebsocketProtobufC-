@@ -11,8 +11,8 @@ namespace TestPackage.DTO
     [EndpointResponse]
     internal class WeatherResponse : IResponse
     {
-        public string name { get; set; }
-
-        public decimal temp { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public float Price { get; set; }
     }
 }

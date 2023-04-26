@@ -19,10 +19,10 @@ namespace TestPackage.Services
         public WeatherResponse GetService(WeatherRequest weather)
         {
             Console.WriteLine("Database query");
-            return new WeatherResponse { request_id = weather.request_id, name = "DatabaseName", temp = 100 };
+            return new WeatherResponse { request_id = weather.request_id, Name = "DatabaseName", Price = 100 };
         }
 
-        public void NotifyWeatherChange()
+        public async void NotifyWeatherChange()
         {
             _notificationService.SendNotification<WeatherNotification>();
         }

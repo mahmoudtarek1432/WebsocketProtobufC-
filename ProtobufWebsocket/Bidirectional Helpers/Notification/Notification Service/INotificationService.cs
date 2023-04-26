@@ -10,7 +10,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
 {
     public interface INotificationService
     {
-        public Task SendNotification<T>() where T : INotificationEndpoint;
+        public void SendNotification<T>() where T : INotificationEndpoint;
         public Task SendNotification<T>(IEnumerable<string> Id) where T : class, INotificationEndpoint;
     }
 }

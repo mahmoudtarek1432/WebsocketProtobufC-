@@ -20,12 +20,11 @@ namespace ProtobufWebsocket.Protobuf_Helper
 
         public static object Decode(Type type,byte[] bytes)
         {
-            using (MemoryStream ms = new MemoryStream(bytes))
-            {
-                
-                var decoded = ProtoBuf.Serializer.Deserialize(type, ms);
-                return decoded;
-            }
+            using MemoryStream ms = new MemoryStream(bytes);
+    
+            var decoded = ProtoBuf.Serializer.Deserialize(type, ms);
+            return decoded;
+            
         }
 
         /**

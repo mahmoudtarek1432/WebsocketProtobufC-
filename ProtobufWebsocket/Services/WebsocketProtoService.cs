@@ -4,6 +4,7 @@ using ProtobufWebsocket.Protobuf_Helper;
 using ProtobufWebsocket.Websocket_Helper;
 using Microsoft.AspNetCore.Builder;
 using ProtobufWebsocket.Broadcast_Helper;
+using ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Service;
 
 namespace ProtobufWebsocket.Services
 {
@@ -25,7 +26,9 @@ namespace ProtobufWebsocket.Services
          */
         public static IServiceCollection AddProtoWebsocketService(this IServiceCollection services, System.Reflection.Assembly assembly,string address, string path="/proto")
         {
-            services.AddSingleton<IBroadcastService, BroadcastService>(); 
+            services.AddSingleton<IBroadcastService, BroadcastService>();
+            services.AddSingleton<INotificationService, NotificationService>();
+
 
             var ServiceProvider = services.BuildServiceProvider();
             UseProtoWebsocketServiceDI(ServiceProvider);

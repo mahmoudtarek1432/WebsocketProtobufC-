@@ -31,7 +31,7 @@ namespace ProtobufWebsocket.Broadcast_Helper
             var endpointObject = Activator.CreateInstance(endpointProperties.EndpointType, endpointConstructorParams);
 
             //endpoint is not uniquely identified, user id will be 0
-            endpointObject = EndpointHelper.EndpointHelper.PassUserId(endpointObject, "broadcast");
+            endpointObject = EndpointHelper.EndpointHelper. PassUserId(endpointObject, "broadcast");
 
             var handleReturn = EndpointHelper.EndpointHelper.Handle(endpointObject, request);
 
