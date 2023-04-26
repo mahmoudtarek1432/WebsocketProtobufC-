@@ -25,7 +25,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
             var sessionManager = SessionInstance.getSessionManagerInstance();
 
             var notificationObject = CreateNotificationObject(typeof(T));
-            var task = EndpointHelper.EndpointHelper.InvokeHandler(notificationObject) ;
+            var task = notificationObject.InvokeHandler() ;
             var resolvedResponse = AssemblyHelper.resolveTask(task);
             var endpoint = ProtobufAccessHelper.fillEndpoint(resolvedResponse);
             var encode = ProtobufAccessHelper.Encode(endpoint);
@@ -48,7 +48,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
                     if (notificationObject == null)
                         throw new Exception($"notification handler creation yeilds null {nameof(SendNotification)}");
 
-                    var Result = EndpointHelper.EndpointHelper.InvokeHandler(notificationObject);
+                    var Result = notificationObject.InvokeHandler();
                     var encode = ProtobufAccessHelper.Encode(Result);
                     foreach (var session in sessions)
                     {

@@ -1,6 +1,7 @@
 ﻿using ProtoBuf;
 using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Attributes;
+using ProtobufWebsocket.Reflection_Extentions;
 using ProtobufWebsocket.Model;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace ProtobufWebsocket.EndpointHelper
         //creates a new type builder that is taken from a class at compile time.
         //the type contains all the class's fields and methods, protocontract attribute is added
         //and each field gets a protomember attribute
-        public static TypeBuilder PrepareForProto((Type Class, string EndpointType) baseType, ModuleBuilder module)
+        public TypeBuilder PrepareForProto((Type Class, string EndpointType) baseType, ModuleBuilder module)
         {
             TypeBuilder typebuilder = null;
 
@@ -43,27 +44,14 @@ namespace ProtobufWebsocket.EndpointHelper
             return typebuilder;
         }
 
-        private static void decoratePropertiesWithProtoMember(FieldBuilder field, int tag)
+        private void decoratePropertiesWithProtoMember(FieldBuilder field, int tag)
         {
             var member = ProtoAssemblyBuilder.DecorateType<ProtoMemberAttribute>(new Type[] { typeof(int) }, new object[] { tag });
             field.SetCustomAttribute(member);
 
         }
 
-        public static (Type, string) identifyEndpoint (Type type)
-        {
-
-            var Reqatt = type.GetCustomAttributes().Where(A =>
-                A.GetType().Name == typeof(EndpointRequestAttribute).Name);
-
-            if(Reqatt.Any())
-            {
-                return (type, "request");
-            }
-            return (type, "response");
-        }
-
-        public static TypeBuilder CreateEnumerableContainer(ModuleBuilder moduleBuilder, IEnumerable<Type> memberType, string name)
+        public TypeBuilder CreateEnumerableContainer(ModuleBuilder moduleBuilder, IEnumerable<Type> memberType, string name)
         {
             var endpoint = moduleBuilder.DefineType(name, TypeAttributes.Public);
             var protoContract = ProtoAssemblyBuilder.DecorateType<ProtoContractAttribute>();
@@ -82,7 +70,7 @@ namespace ProtobufWebsocket.EndpointHelper
         }
 
         //checks weather the type is a primitive or a class, in case of a class, recursivly prepares it for proto maping
-        public static Type buildProtoFieldType( ModuleBuilder mb,Type BasePropertyType)
+        private Type buildProtoFieldType( ModuleBuilder mb,Type BasePropertyType)
         {
             //recursivly, if the member is not a primitive prepare for protobuf 
             if ((BasePropertyType.Name == "String"

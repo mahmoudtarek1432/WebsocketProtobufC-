@@ -11,7 +11,7 @@ namespace TestPackage.Endpoints
 {
     internal class WeatherNotification : ProtoEndpointBase.Notification<WeatherResponse>
     {
-        public async override Task<WeatherResponse> Handle()
+        public async override Task<WeatherResponse> HandleAsync()
         {
             var response = new WeatherResponse
             {

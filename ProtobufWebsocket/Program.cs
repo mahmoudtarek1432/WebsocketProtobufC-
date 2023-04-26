@@ -63,7 +63,7 @@ class testendpoint : ProtoEndpointBase.Request<product>.WithResponse<ProductResp
     {
         _nameingService = name;
     }
-    public override async Task<ProductResponse> Handle(product Request)
+    public override async Task<ProductResponse> HandleAsync(product Request)
     {
         Console.WriteLine("ITS ALIVE !!!! my ID is "+ UserId);
         var pr = new ProductResponse() { Name = _nameingService.GetnameCongrats("mahmoud"), Description = Request.Description+ "and a response from the server", Price = 10};
@@ -80,7 +80,7 @@ class TestNotifications : ProtoEndpointBase.Notification<ProductResponse>
         _nameingService = name;
     }
 
-    public override Task<ProductResponse> Handle()
+    public override Task<ProductResponse> HandleAsync()
     {
         throw new NotImplementedException();
     }

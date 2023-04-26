@@ -4,6 +4,7 @@ using ProtobufWebsocket.Attributes;
 using ProtobufWebsocket.Broadcast_Helper;
 using ProtobufWebsocket.Dependency_Injection;
 using ProtobufWebsocket.Endpoint_Provider;
+using ProtobufWebsocket.Extentions;
 using ProtobufWebsocket.Model;
 using ProtobufWebsocket.Protobuf_Helper;
 using ProtobufWebsocket.RequestMapping;
@@ -55,7 +56,6 @@ namespace ProtobufWebsocket.EndpointHelper
                         {
                             //get the Request's coresponding endpoint
                             EndpointList.Add((element, RequestMappingHelper.GetEndpoint(element.GetType())));
-
                         });
                     }
                 }
@@ -99,28 +99,6 @@ namespace ProtobufWebsocket.EndpointHelper
             return staticTypeInstance;
         }
 
-        //invokes the Handle function delegate that is present in classes inheriting endpoint base abstract class
-        //handle is the fuction responsible for processing the incoming request
-        internal static object InvokeHandler(object requestObject, object EndpointObject)
-        {
-            var endpointHandlerType = EndpointObject.GetType();
-            var handleDelegate = endpointHandlerType.GetMethod("Handle");
-
-            var Requesttype = endpointHandlerType.BaseType!.GetGenericArguments().Where(A => A.BaseType.Name == typeof(IRequest).Name).FirstOrDefault();
-            var HandlerRequest = PopulateType(Requesttype,requestObject); //returns an instance of the concrete class created as a request type
-
-            return handleDelegate.Invoke(EndpointObject, new object[] { HandlerRequest }); //second argument is the request object
-        }
-
-        //with no arguments
-        internal static object InvokeHandler(object EndpointObject)
-        {
-            var endpointHandlerType = EndpointObject.GetType();
-            var handleDelegate = endpointHandlerType.GetMethod("Handle");
-
-            return handleDelegate.Invoke(EndpointObject, Array.Empty<object>())!; //second argument is the request object
-        }
-
         //checks if the passed object that inherets IRequest is a broadcast subscription request
         internal static bool CheckIfBroadcast(object Request)
         {
@@ -155,10 +133,23 @@ namespace ProtobufWebsocket.EndpointHelper
 
         public static object Handle(object EndpointObject, object requestObject)
         {
-             var handlerReturnObject = InvokeHandler(requestObject, EndpointObject); //returns a task<object>
+             var handlerReturnObject = EndpointObject.InvokeHandler(requestObject); //returns a task<object>
             
             var invokeReturnType = AssemblyHelper.resolveTask(handlerReturnObject);
             return invokeReturnType;
+        }
+
+        public static (Type, string) identifyEndpoint(Type type)
+        {
+
+            var Reqatt = type.GetCustomAttributes().Where(A =>
+                A.GetType().Name == typeof(EndpointRequestAttribute).Name);
+
+            if (Reqatt.Any())
+            {
+                return (type, "request");
+            }
+            return (type, "response");
         }
     }
 }

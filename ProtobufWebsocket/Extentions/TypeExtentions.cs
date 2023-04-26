@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using ProtobufWebsocket.Model;
+using System.Reflection;
 
 namespace ProtobufWebsocket.Extentions
 {
@@ -30,6 +31,47 @@ namespace ProtobufWebsocket.Extentions
                 }
             }
             return paramsList;
+        }
+
+        internal static object PopulateType(this Type StaticType, object runtimeObject) //clones runtime value, the runtime type has the exact same properties and fields
+        {
+            //getUninitializedObject returns an object of type, without getting instantiated.
+            //this is used as the types passed are usually modles and dtos that does not have constructor implementations.
+
+            var staticTypeInstance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(StaticType);
+
+            foreach (var field in staticTypeInstance.GetType().GetProperties())
+            {
+                var runtimeFieldValue = runtimeObject.GetType().GetField(field.Name).GetValue(runtimeObject);
+                field.SetValue(staticTypeInstance, runtimeFieldValue);
+            }
+            return staticTypeInstance;
+        }
+
+        //invokes the Handle function delegate that is present in classes inheriting endpoint base abstract class
+        //handle is the fuction responsible for processing the incoming request
+        /** <summary> invokes handle function </summary> */
+        internal static object InvokeHandler(this object EndpointObject, object requestObject)
+        {
+            var endpointHandlerType = EndpointObject.GetType();
+            var handleDelegate = endpointHandlerType.GetMethod("Handle");
+
+            var Requesttype = endpointHandlerType.BaseType!.GetGenericArguments().Where(A => A.BaseType.Name == typeof(IRequest).Name).FirstOrDefault();
+
+            if (Requesttype == null) throw new ArgumentNullException(nameof(InvokeHandler));
+
+            var HandlerRequest = Requesttype.PopulateType(requestObject); //returns an instance of the concrete class created as a request type
+
+            return handleDelegate.Invoke(EndpointObject, new object[] { HandlerRequest })!; //second argument is the request object
+        }
+
+        //with no arguments
+        internal static object InvokeHandler(this object EndpointObject)
+        {
+            var endpointHandlerType = EndpointObject.GetType();
+            var handleDelegate = endpointHandlerType.GetMethod("Handle");
+
+            return handleDelegate.Invoke(EndpointObject, Array.Empty<object>())!; //second argument is the request object
         }
     }
 }

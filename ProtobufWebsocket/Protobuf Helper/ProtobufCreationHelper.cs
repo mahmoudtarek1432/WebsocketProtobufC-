@@ -24,12 +24,13 @@ namespace ProtobufWebsocket.Protobuf_Helper
                 .Count() > 0).ToList();
 
             //list of tuple containing the type and a string of request or response
-            var IdentifiedEndpoints = endpoints.Select(Endpointbuilder.identifyEndpoint).ToList(); //group endpoints with thier endpoint type
+            var IdentifiedEndpoints = endpoints.Select(EndpointHelper.EndpointHelper.identifyEndpoint).ToList(); //group endpoints with thier endpoint type
 
             var EndpointBuilder = new List<(TypeBuilder, string)>();
 
             //models mapped into endpoints by adding protocontract attribute and each member gets a protomember tag
-            IdentifiedEndpoints.ForEach(E => { EndpointBuilder.Add((Endpointbuilder.PrepareForProto(E, module), E.Item2)); });
+            var endpointBuilder = new Endpointbuilder();
+            IdentifiedEndpoints.ForEach(E => { EndpointBuilder.Add((endpointBuilder.PrepareForProto(E, module), E.Item2)); });
 
             var createdTypes = EndpointBuilder.Select(Eb => (Eb.Item1.CreateType(), Eb.Item2));
 
@@ -51,7 +52,8 @@ namespace ProtobufWebsocket.Protobuf_Helper
         internal static Type CreateRequestEndpoint(ModuleBuilder mb, IEnumerable<(Type,string)> requests)
         {
             var reqTypes = requests.Where(T => T.Item2 == "request").Select(T => T.Item1!).ToList();
-            var endpointBuilder = Endpointbuilder.CreateEnumerableContainer(mb, reqTypes,
+            var builder = new Endpointbuilder();
+            var endpointBuilder = builder.CreateEnumerableContainer(mb, reqTypes,
                                                                           "RequestEndpoint");
             return endpointBuilder.CreateType();
         }
@@ -59,8 +61,9 @@ namespace ProtobufWebsocket.Protobuf_Helper
         internal static Type CreateResponseEndpoint(ModuleBuilder mb, IEnumerable<(Type, string)> Responses)
         {
             var resTypes = Responses.Where(T => T.Item2 == "response").Select(T => T.Item1!).ToList();
-            var endpointBuilder = Endpointbuilder.CreateEnumerableContainer(mb, resTypes, "ResponseEndpoint");
-            return endpointBuilder.CreateType();
+            var builder = new Endpointbuilder();
+            var endpointBuilder = builder.CreateEnumerableContainer(mb, resTypes, "ResponseEndpoint");
+            return endpointBuilder.CreateType()?? throw new ArgumentNullException();
         }
     }
 }
