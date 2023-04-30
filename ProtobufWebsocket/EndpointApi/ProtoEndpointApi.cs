@@ -4,6 +4,7 @@ using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.EndpointHelper;
 using ProtobufWebsocket.Model;
 using ProtobufWebsocket.Protobuf_Helper;
+using ProtobufWebsocket.Extentions;
 using ProtobufWebsocket.RequestMapping;
 using System;
 using System.Collections.Generic;
@@ -68,36 +69,11 @@ namespace ProtobufWebsocket.EndpointApi
                 var type = ResponseObject.GetType().GetProperty("Errors")!.PropertyType.GetGenericArguments().FirstOrDefault();
                 errorArrayValue = Array.CreateInstance(type, 1);
             }
-            errorArrayValue = AppendStaticArray(errorArrayValue, error);
+            errorArrayValue = errorArrayValue.AppendStaticArray(error);
             errorsProperty.SetValue(ResponseObject, errorArrayValue);
             return ResponseObject;
         }
 
-        public static object AppendStaticArray(object array, object ToGetAppended)
-        {
-            var arrayType = array.GetType();
-            if (!array.GetType().IsArray)
-                throw new Exception($"The passed is object is not an instance of Type Array {nameof(AppendStaticArray)}");
-            var name = arrayType.GetElementType()!.Name;
-            if (!(arrayType.GetElementType()!.Name == ToGetAppended.GetType().Name)) //element type and object are not the same
-                throw new Exception($"array and object are not of the same type (Reflection), thrown at {nameof(AppendStaticArray)}");
 
-            var elementType = arrayType.GetElementType();                                                                               //used to Traverse inside the object
-            var elementObject = Activator.CreateInstance(arrayType.GetElementType()!);
-
-            var emptyelementType = elementObject.GetType();
-            var test = emptyelementType.GetProperties();
-            emptyelementType.GetProperties().ToList().ForEach(e =>
-            {
-                e.SetValue(elementObject, ToGetAppended.GetType().GetProperty(e.Name).GetValue(ToGetAppended)); //searches the to be cloned object for field name and sets the element value
-            });
-
-            //arrayType
-            var AppendedArray = RuntimeArrayHelpers.AppendObjectToRuntimeArray(array, elementObject);
-
-            return AppendedArray;
-
-
-        }
     }
 }

@@ -20,7 +20,7 @@ namespace TestPackage.Endpoints
             _notificationService = notificationService?? throw new ArgumentException(); 
         }
 
-        public override async Task<WeatherResponse> Handle(WeatherRequest Request)
+        public override async Task<WeatherResponse> HandleAsync(WeatherRequest Request)
         {
             var resposne =  _weatherService.GetService(Request);
             _weatherService.NotifyWeatherChange();
