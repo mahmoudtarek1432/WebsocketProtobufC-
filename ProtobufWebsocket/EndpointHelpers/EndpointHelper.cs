@@ -35,7 +35,6 @@ namespace ProtobufWebsocket.EndpointHelper
                     BroadcastDictionaryProvider.CreateNewDictionaryInstance(handler.Name); //intialize an endpoint dictionary
                 }
             }
-
             EndpointsHandleProvider.CreateEndpointHandlerSingleton(Handlers.ToList()); //endpoints saved
         }
 
