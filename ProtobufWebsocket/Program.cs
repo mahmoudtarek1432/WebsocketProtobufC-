@@ -14,7 +14,7 @@ Host.CreateDefaultBuilder(args).ConfigureServices(s =>
     s.AddProtoWebsocketService(Assembly.GetExecutingAssembly(),"ws://127.0.0.1/","/test");
 }).Build();
 
-new NotificationService().SendNotification<TestNotifications>();
+//new NotificationService().SendNotification<TestNotifications>();
 
 Console.ReadLine();
 

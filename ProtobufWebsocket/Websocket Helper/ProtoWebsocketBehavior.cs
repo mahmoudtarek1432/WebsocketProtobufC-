@@ -1,6 +1,7 @@
 ﻿using WebSocketSharp;
 using ProtobufWebsocket.EndpointApi;
 using WebSocketSharp.Server;
+using ProtobufWebsocket.ProtoFileConstructor;
 
 namespace ProtobufWebsocket.Websocket_Helper
 {
@@ -9,6 +10,13 @@ namespace ProtobufWebsocket.Websocket_Helper
         protected override void OnOpen()
         {
             Console.WriteLine($"socket started with id:{ID}");
+            //send request and response proto files
+            var requestProto = ProtoFileProvider.getRequestFile();
+            var responseProto = ProtoFileProvider.getResponseFile();
+
+            Send(requestProto);
+            Send(responseProto);
+
             base.OnOpen();
         }
 

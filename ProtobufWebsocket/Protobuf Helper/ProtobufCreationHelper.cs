@@ -3,6 +3,7 @@ using ProtobufWebsocket.Assembly_Helpers;
 using ProtobufWebsocket.Attributes;
 using ProtobufWebsocket.Endpoint_Provider;
 using ProtobufWebsocket.EndpointHelper;
+using ProtobufWebsocket.ProtoFileConstructor;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -42,11 +43,14 @@ namespace ProtobufWebsocket.Protobuf_Helper
             EndpointsTypeProvider.CreateResponseEndpointSingleton(res);
             EndpointsTypeProvider.CreateRequestEndpointSingleton(req);
 
-            var proto1 = RuntimeTypeModel.Default.GetSchema(req, ProtoSyntax.Default);
-            var proto2 = RuntimeTypeModel.Default.GetSchema(res, ProtoSyntax.Default);
+            var RequestProtoFile = RuntimeTypeModel.Default.GetSchema(req, ProtoSyntax.Default);
+            var ResponseProtoFile = RuntimeTypeModel.Default.GetSchema(res, ProtoSyntax.Default);
 
-            Console.WriteLine(proto1 + "\n");
-            Console.WriteLine(proto2);
+            Console.WriteLine(RequestProtoFile + "\n");
+            Console.WriteLine(ResponseProtoFile);
+
+            ProtoFileProvider.createRequestFile(RequestProtoFile);
+            ProtoFileProvider.createResposneFile(ResponseProtoFile);
         }
 
         internal static Type CreateRequestEndpoint(ModuleBuilder mb, IEnumerable<(Type,string)> requests)
