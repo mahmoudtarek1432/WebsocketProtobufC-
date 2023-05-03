@@ -80,7 +80,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
             
             if(constructorParamTypes.Count() != 0)
             {
-                var constructorParamObjects = constructorParamTypes.Select(T => DependencyInjectionHelper.IntializeWithDI(T));
+                var constructorParamObjects = constructorParamTypes.Select(T => DependencyInjectionHelper.IntializeWithDI(T)).ToArray();
                 notificationObject = Activator.CreateInstance(type, constructorParamObjects)!;
             }
             else

@@ -54,7 +54,7 @@ namespace ProtobufWebsocket.Extentions
         internal static object InvokeHandler(this object EndpointObject, object requestObject)
         {
             var endpointHandlerType = EndpointObject.GetType();
-            var handleDelegate = endpointHandlerType.GetMethod("Handle");
+            var handleDelegate = endpointHandlerType.GetMethod("HandleAsync");
 
             var Requesttype = endpointHandlerType.BaseType!.GetGenericArguments().Where(A => A.BaseType.Name == typeof(IRequest).Name).FirstOrDefault();
 
@@ -69,7 +69,7 @@ namespace ProtobufWebsocket.Extentions
         internal static object InvokeHandler(this object EndpointObject)
         {
             var endpointHandlerType = EndpointObject.GetType();
-            var handleDelegate = endpointHandlerType.GetMethod("Handle");
+            var handleDelegate = endpointHandlerType.GetMethod("HandleAsync");
 
             return handleDelegate.Invoke(EndpointObject, Array.Empty<object>())!; //second argument is the request object
         }
