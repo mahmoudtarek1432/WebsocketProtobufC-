@@ -22,7 +22,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
         public void SendNotification<T>() where T : INotificationEndpoint
         {
         
-            var sessionManager = SessionInstance.getSessionManagerInstance();
+            var sessionManager = SessionInstance.GetSessionManagerInstance();
 
             var notificationObject = CreateNotificationObject(typeof(T));
             var task = notificationObject.InvokeHandler() ;
@@ -59,7 +59,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
 
         private static IEnumerable<IWebSocketSession> GetSessionList(IEnumerable<string> Ids = null)
         {
-            var sessions = SessionInstance.getSessionManagerInstance();
+            var sessions = SessionInstance.GetSessionManagerInstance();
             var filtered = new List<IWebSocketSession>();
             if(Ids != null)
             {
@@ -78,7 +78,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
             IEnumerable<Type> constructorParamTypes = type.RetriveConstructorParameters() as IEnumerable<Type>;
             object notificationObject;
             
-            if(constructorParamTypes.Count() != 0)
+            if(constructorParamTypes.Any())
             {
                 var constructorParamObjects = constructorParamTypes.Select(T => DependencyInjectionHelper.IntializeWithDI(T)).ToArray();
                 notificationObject = Activator.CreateInstance(type, constructorParamObjects)!;

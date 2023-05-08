@@ -5,7 +5,7 @@ namespace ProtobufWebsocket.Model
     {
         public int? request_id { get; set; }
 
-        public ResultCode? resultCode { get; set; }
+        public ResultCode? result_code { get; set; }
 
         public IEnumerable<Error>? Errors { get; set; }
     }

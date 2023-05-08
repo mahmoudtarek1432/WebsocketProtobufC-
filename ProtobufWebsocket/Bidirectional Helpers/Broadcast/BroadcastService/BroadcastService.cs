@@ -39,7 +39,7 @@ namespace ProtobufWebsocket.Broadcast_Helper
 
             var sentbytes =  ProtobufAccessHelper.Encode(responseEndpoint);
 
-            var sessions = SessionInstance.getSessionManagerInstance();
+            var sessions = SessionInstance.GetSessionManagerInstance();
 
             //invoke handler
 

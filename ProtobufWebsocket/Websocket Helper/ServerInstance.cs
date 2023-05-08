@@ -4,20 +4,20 @@ namespace ProtobufWebsocket.Websocket_Helper
 {
     internal class SessionInstance
     {
-        static WebSocketSessionManager _Session { get; set; }
+        static WebSocketSessionManager Session { get; set; }
 
-        public static WebSocketSessionManager getSessionManagerInstance()
+        public static WebSocketSessionManager GetSessionManagerInstance()
         {
-            if(_Session == null)
+            if(Session == null)
             {
                 throw new ArgumentNullException();
             }
-            return _Session;
+            return Session;
         }
 
-        public static void createSessionInstance(WebSocketSessionManager session)
+        public static void CreateSessionInstance(WebSocketSessionManager session)
         {
-            _Session = session;
+            Session = session;
         }
     }
 }

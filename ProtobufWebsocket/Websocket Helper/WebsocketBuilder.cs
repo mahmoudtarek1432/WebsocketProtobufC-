@@ -15,7 +15,7 @@ namespace ProtobufWebsocket.Websocket_Helper
         public static WebSocketServer ConfigureServer(string Address, string Path)
         {
             if (string.IsNullOrEmpty(Address))
-                throw new ArgumentNullException($"the passed address is empty or null {nameof(ConfigureServer)}");
+                throw new ArgumentNullException($"the passed address is empty or null {nameof(Address)}");
 
             var server = new WebSocketServer(Address);
             server.AddWebSocketService<ProtoWebsocketBehavior>(Path);
@@ -23,7 +23,7 @@ namespace ProtobufWebsocket.Websocket_Helper
 
             if (server.WebSocketServices.TryGetServiceHost(Path,out var host))
             {
-                SessionInstance.createSessionInstance(host.Sessions);
+                SessionInstance.CreateSessionInstance(host.Sessions);
             }
            
 
