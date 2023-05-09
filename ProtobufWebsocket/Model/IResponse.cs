@@ -3,11 +3,11 @@ namespace ProtobufWebsocket.Model
 {
     public abstract class IResponse : ISerializable
     {
-        public int? Request_id { get; set; }
+        public int Request_id { get; set; }
 
-        public ResultCode? Result_code { get; set; }
+        public ResultCode Result_code { get; set; }
 
-        public IEnumerable<Error>? Errors { get; set; }
+        public IEnumerable<Error> Errors { get; set; }
     }
 
     public enum ResultCode
