@@ -24,18 +24,18 @@ namespace ProtobufWebsocket.Broadcast_Helper
 
             var endpointProperties = RequestMappingHelper.GetEndpoint(request.GetType());
 
-            var endpointusers = BroadcastDictionaryProvider.GetEndpointUsers(endpointProperties.EndpointType.GetType().Name);
+            var endpointusers = BroadcastDictionaryProvider.GetEndpointUsers(endpointProperties.EndpointType!.GetType().Name);
 
-            var endpointConstructorParams = endpointProperties.EndpointConstructorParams.Select(DependencyInjectionHelper.IntializeWithDI);
+            var endpointConstructorParams = endpointProperties.EndpointConstructorParams!.Select(DependencyInjectionHelper.IntializeWithDI);
 
             var endpointObject = Activator.CreateInstance(endpointProperties.EndpointType, endpointConstructorParams);
 
             //endpoint is not uniquely identified, user id will be 0
-            endpointObject = EndpointHelper.EndpointHelper. PassUserId(endpointObject, "broadcast");
+            endpointObject = EndpointHelper.EndpointHelper. PassUserId(endpointObject!, "broadcast");
 
             var handleReturn = EndpointHelper.EndpointHelper.Handle(endpointObject, request);
 
-            var responseEndpoint = ProtobufAccessHelper.fillEndpoint(handleReturn, null); //second param to create a new endpoint
+            var responseEndpoint = ProtobufAccessHelper.FillEndpoint(handleReturn, null); //second param to create a new endpoint
 
             var sentbytes =  ProtobufAccessHelper.Encode(responseEndpoint);
 

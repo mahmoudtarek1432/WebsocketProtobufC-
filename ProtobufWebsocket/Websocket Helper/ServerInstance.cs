@@ -4,7 +4,7 @@ namespace ProtobufWebsocket.Websocket_Helper
 {
     internal class SessionInstance
     {
-        static WebSocketSessionManager Session { get; set; }
+        static WebSocketSessionManager? Session { get; set; }
 
         public static WebSocketSessionManager GetSessionManagerInstance()
         {

@@ -27,7 +27,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
             var notificationObject = CreateNotificationObject(typeof(T));
             var task = notificationObject.InvokeHandler() ;
             var resolvedResponse = AssemblyHelper.resolveTask(task);
-            var endpoint = ProtobufAccessHelper.fillEndpoint(resolvedResponse);
+            var endpoint = ProtobufAccessHelper.FillEndpoint(resolvedResponse);
             var encode = ProtobufAccessHelper.Encode(endpoint);
 
             sessionManager.BroadcastAsync(encode, () => Console.WriteLine(""));
@@ -44,9 +44,8 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
 
                     var constructorParamTypes = x.RetriveConstructorParameters();
                     var constructorParamObjects = constructorParamTypes.Select(T => DependencyInjectionHelper.IntializeWithDI(T));
-                    var notificationObject = Activator.CreateInstance(x, constructorParamObjects);
-                    if (notificationObject == null)
-                        throw new Exception($"notification handler creation yeilds null {nameof(SendNotification)}");
+
+                    var notificationObject = Activator.CreateInstance(x, constructorParamObjects) ?? throw new Exception($"notification handler creation yeilds null {nameof(SendNotification)}");
 
                     var Result = notificationObject.InvokeHandler();
                     var encode = ProtobufAccessHelper.Encode(Result);
@@ -57,7 +56,7 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
                 });
         }
 
-        private static IEnumerable<IWebSocketSession> GetSessionList(IEnumerable<string> Ids = null)
+        private static IEnumerable<IWebSocketSession> GetSessionList(IEnumerable<string>? Ids = null)
         {
             var sessions = SessionInstance.GetSessionManagerInstance();
             var filtered = new List<IWebSocketSession>();

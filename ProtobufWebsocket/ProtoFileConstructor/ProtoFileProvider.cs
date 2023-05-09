@@ -8,31 +8,31 @@ namespace ProtobufWebsocket.ProtoFileConstructor
 {
     internal class ProtoFileProvider
     {
-        private static string RequestFile;
-        private static string ResponseFile;
+        private static string? RequestFile;
+        private static string? ResponseFile;
 
-        public static string getRequestFile()
+        public static string GetRequestFile()
         {
             if (RequestFile == null)
-                throw new ArgumentNullException(nameof(getRequestFile));
+                throw new ArgumentNullException(nameof(GetRequestFile));
             return RequestFile; 
         }
 
-        public static string getResponseFile()
+        public static string GetResponseFile()
         {
-            if (RequestFile == null)
-                throw new ArgumentNullException(nameof(getRequestFile));
-            return RequestFile;
+            if (ResponseFile == null)
+                throw new ArgumentNullException(nameof(GetResponseFile));
+            return ResponseFile;
         }
 
-        public static void createRequestFile(string requestProto)
+        public static void CreateRequestFile(string requestProto)
         {
             RequestFile = requestProto;
         }
 
-        public static void createResposneFile(string responseProto)
+        public static void CreateResposneFile(string responseProto)
         {
-            RequestFile = responseProto;
+            ResponseFile = responseProto;
         }
     }
 }

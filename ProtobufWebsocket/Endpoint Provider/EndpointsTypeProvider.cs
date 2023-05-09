@@ -9,36 +9,36 @@ namespace ProtobufWebsocket.Endpoint_Provider
 {
     internal class EndpointsTypeProvider
     {
-        static Type _response { get; set; }
-        static Type _request { get; set; }
+        static Type? Response { get; set; }
+        static Type? Request { get; set; }
 
-        public static Type getResponseInstance()
+        public static Type GetResponseInstance()
         {
-            if (_response == null)
+            if (Response == null)
             {
-                throw new ArgumentNullException(nameof(getResponseInstance));
+                throw new ArgumentNullException(nameof(GetResponseInstance));
             }
-            return _response;
+            return Response;
         }
 
         public static void CreateResponseEndpointSingleton(Type responses)
         {
-            _response = responses;
+            Response = responses;
         }
 
 
-        public static Type getRequestInstance()
+        public static Type GetRequestInstance()
         {
-            if (_request == null)
+            if (Request == null)
             {
-                throw new ArgumentNullException(nameof(getRequestInstance));
+                throw new ArgumentNullException(nameof(GetRequestInstance));
             }
-            return _request;
+            return Request;
         }
 
         public static void CreateRequestEndpointSingleton(Type request)
         {
-            _request = request;
+            Request = request;
         }
     }
 }

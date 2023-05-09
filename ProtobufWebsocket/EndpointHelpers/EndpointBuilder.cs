@@ -21,7 +21,7 @@ namespace ProtobufWebsocket.EndpointHelper
         //and each field gets a protomember attribute
         public TypeBuilder PrepareForProto((Type Class, string EndpointType) baseType, ModuleBuilder module)
         {
-            TypeBuilder typebuilder = null;
+            TypeBuilder? typebuilder;
 
             typebuilder = module.DefineType(baseType.Class.Name, TypeAttributes.Public);
             var contract = ProtoAssemblyBuilder.DecorateType<ProtoContractAttribute>();
@@ -34,9 +34,9 @@ namespace ProtobufWebsocket.EndpointHelper
                 int index = 1;
                 foreach (var property in properties)
                 {              
-                    var fieldType = buildProtoFieldType(module, property.PropertyType);
+                    var fieldType = BuildProtoFieldType(module, property.PropertyType);
                     var fieldBuilder = typebuilder.DefineField(property.Name, fieldType, FieldAttributes.Public);
-                    decoratePropertiesWithProtoMember(fieldBuilder, index++);
+                    DecoratePropertiesWithProtoMember(fieldBuilder, index++);
                    //recursivly, if the member is not a primitive add a protocontract to the 
                 }
                 //properties now are ProtoMembers
@@ -44,14 +44,14 @@ namespace ProtobufWebsocket.EndpointHelper
             return typebuilder;
         }
 
-        private void decoratePropertiesWithProtoMember(FieldBuilder field, int tag)
+        private static void DecoratePropertiesWithProtoMember(FieldBuilder field, int tag)
         {
             var member = ProtoAssemblyBuilder.DecorateType<ProtoMemberAttribute>(new Type[] { typeof(int) }, new object[] { tag });
             field.SetCustomAttribute(member);
 
         }
 
-        public TypeBuilder CreateEnumerableContainer(ModuleBuilder moduleBuilder, IEnumerable<Type> memberType, string name)
+        public static TypeBuilder CreateEnumerableContainer(ModuleBuilder moduleBuilder, IEnumerable<Type> memberType, string name)
         {
             var endpoint = moduleBuilder.DefineType(name, TypeAttributes.Public);
             var protoContract = ProtoAssemblyBuilder.DecorateType<ProtoContractAttribute>();
@@ -62,7 +62,7 @@ namespace ProtobufWebsocket.EndpointHelper
                 var arr = Array.CreateInstance(Type, 1);
                 
                 var fieldBuilder = endpoint.DefineField(Type.Name,arr.GetType(),FieldAttributes.Public);
-                decoratePropertiesWithProtoMember(fieldBuilder, index++);
+                DecoratePropertiesWithProtoMember(fieldBuilder, index++);
                 
             }
 
@@ -70,7 +70,7 @@ namespace ProtobufWebsocket.EndpointHelper
         }
 
         //checks weather the type is a primitive or a class, in case of a class, recursivly prepares it for proto maping
-        private Type buildProtoFieldType( ModuleBuilder mb,Type BasePropertyType)
+        private Type BuildProtoFieldType( ModuleBuilder mb,Type BasePropertyType)
         {
             //recursivly, if the member is not a primitive prepare for protobuf 
             if ((BasePropertyType.Name == "String"
@@ -79,7 +79,7 @@ namespace ProtobufWebsocket.EndpointHelper
                 || !BasePropertyType.IsClass) == false) //is a created class
             {
                 var checkt = PrepareForProto((BasePropertyType, ""), mb).CreateType(); //send the created type
-                return checkt;
+                return checkt!;
             }
             else if (BasePropertyType.IsGenericType)//is a collection
             {
@@ -89,7 +89,7 @@ namespace ProtobufWebsocket.EndpointHelper
                     foreach (var listType in GenericTypes)
                     {
                         //recursivly fetch class and prepare internal fields
-                        var listclass = buildProtoFieldType(mb, listType);
+                        var listclass = BuildProtoFieldType(mb, listType);
                         var ListclassArray = Array.CreateInstance(listclass, 1);
                         return ListclassArray.GetType();
                     }

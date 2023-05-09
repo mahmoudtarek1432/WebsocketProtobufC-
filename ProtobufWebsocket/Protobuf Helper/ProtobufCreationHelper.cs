@@ -22,10 +22,10 @@ namespace ProtobufWebsocket.Protobuf_Helper
                 t.GetCustomAttributes().Where(A =>
                 A.GetType().Name == typeof(EndpointRequestAttribute).Name
                 || A.GetType().Name == typeof(EndpointResponseAttribute).Name)
-                .Count() > 0).ToList();
+                .Any()).ToList();
 
             //list of tuple containing the type and a string of request or response
-            var IdentifiedEndpoints = endpoints.Select(EndpointHelper.EndpointHelper.identifyEndpoint).ToList(); //group endpoints with thier endpoint type
+            var IdentifiedEndpoints = endpoints.Select(EndpointHelper.EndpointHelper.IdentifyEndpoint).ToList(); //group endpoints with thier endpoint type
 
             var EndpointBuilder = new List<(TypeBuilder, string)>();
 
@@ -35,8 +35,8 @@ namespace ProtobufWebsocket.Protobuf_Helper
 
             var createdTypes = EndpointBuilder.Select(Eb => (Eb.Item1.CreateType(), Eb.Item2));
 
-            var req = CreateRequestEndpoint(module, createdTypes);
-            var res = CreateResponseEndpoint(module, createdTypes);
+            var req = CreateRequestEndpoint(module, createdTypes!);
+            var res = CreateResponseEndpoint(module, createdTypes!);
 
 
             //appends them as singletons
@@ -46,27 +46,25 @@ namespace ProtobufWebsocket.Protobuf_Helper
             var RequestProtoFile = RuntimeTypeModel.Default.GetSchema(req, ProtoSyntax.Default);
             var ResponseProtoFile = RuntimeTypeModel.Default.GetSchema(res, ProtoSyntax.Default);
 
-            Console.WriteLine(RequestProtoFile + "\n");
-            Console.WriteLine(ResponseProtoFile);
+            //Console.WriteLine(RequestProtoFile + "\n");
+            //Console.WriteLine(ResponseProtoFile);
 
-            ProtoFileProvider.createRequestFile(RequestProtoFile);
-            ProtoFileProvider.createResposneFile(ResponseProtoFile);
+            ProtoFileProvider.CreateRequestFile(RequestProtoFile);
+            ProtoFileProvider.CreateResposneFile(ResponseProtoFile);
         }
 
         internal static Type CreateRequestEndpoint(ModuleBuilder mb, IEnumerable<(Type,string)> requests)
         {
             var reqTypes = requests.Where(T => T.Item2 == "request").Select(T => T.Item1!).ToList();
-            var builder = new Endpointbuilder();
-            var endpointBuilder = builder.CreateEnumerableContainer(mb, reqTypes,
+            var endpointBuilder = Endpointbuilder.CreateEnumerableContainer(mb, reqTypes,
                                                                           "RequestEndpoint");
-            return endpointBuilder.CreateType();
+            return endpointBuilder.CreateType()!;
         }
 
         internal static Type CreateResponseEndpoint(ModuleBuilder mb, IEnumerable<(Type, string)> Responses)
         {
             var resTypes = Responses.Where(T => T.Item2 == "response").Select(T => T.Item1!).ToList();
-            var builder = new Endpointbuilder();
-            var endpointBuilder = builder.CreateEnumerableContainer(mb, resTypes, "ResponseEndpoint");
+            var endpointBuilder = Endpointbuilder.CreateEnumerableContainer(mb, resTypes, "ResponseEndpoint");
             return endpointBuilder.CreateType()?? throw new ArgumentNullException();
         }
     }

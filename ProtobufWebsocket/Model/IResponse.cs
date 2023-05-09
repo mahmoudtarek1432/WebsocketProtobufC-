@@ -3,9 +3,9 @@ namespace ProtobufWebsocket.Model
 {
     public abstract class IResponse : ISerializable
     {
-        public int? request_id { get; set; }
+        public int? Request_id { get; set; }
 
-        public ResultCode? result_code { get; set; }
+        public ResultCode? Result_code { get; set; }
 
         public IEnumerable<Error>? Errors { get; set; }
     }
@@ -19,7 +19,7 @@ namespace ProtobufWebsocket.Model
 
     public class Error
     {
-        public string message { get; set; }
+        public string? Message { get; set; }
     }
    
 }

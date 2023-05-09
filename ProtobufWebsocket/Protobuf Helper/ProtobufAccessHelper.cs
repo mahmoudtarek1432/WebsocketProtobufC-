@@ -9,7 +9,7 @@ namespace ProtobufWebsocket.Protobuf_Helper
     {
         public static byte[] Encode(object SerializeObject)
         {
-            var bytes = new byte[0];
+            var bytes = Array.Empty<byte>();
             using (var ms = new MemoryStream())
             {
                 ProtoBuf.Serializer.Serialize(ms, SerializeObject);
@@ -20,7 +20,7 @@ namespace ProtobufWebsocket.Protobuf_Helper
 
         public static object Decode(Type type,byte[] bytes)
         {
-            using MemoryStream ms = new MemoryStream(bytes);
+            using MemoryStream ms = new(bytes);
     
             var decoded = ProtoBuf.Serializer.Deserialize(type, ms);
             return decoded;
@@ -32,14 +32,12 @@ namespace ProtobufWebsocket.Protobuf_Helper
          * Fills an endpoint with responses, responseEndpoint param when null creates an empty endpoint
          * if an endpoint is passed, responses get pushed into the arrays
          */
-        public static object fillEndpoint(object endpointObject, object responseEndpoint = null)
+        public static object FillEndpoint(object endpointObject, object? responseEndpoint = null)
         {
-            if(responseEndpoint == null)
-            {
-                responseEndpoint = createResponseEndpoint();
-            }
 
-            var responseEndpointType = EndpointsTypeProvider.getResponseInstance(); //endpoint response singleton
+            responseEndpoint ??= CreateResponseEndpoint();
+            
+            var responseEndpointType = EndpointsTypeProvider.GetResponseInstance(); //endpoint response singleton
 
             responseEndpointType.GetRuntimeFields().ToList().ForEach(field =>
             {
@@ -50,10 +48,8 @@ namespace ProtobufWebsocket.Protobuf_Helper
                     {
                         //activator when used on an array returns object of the inside list.
                         var SerializableObjectArray = field.GetValue(responseEndpoint);
-                        if (SerializableObjectArray == null)
-                        {
-                            SerializableObjectArray = Array.CreateInstance(field.FieldType.GetElementType()!, 1); // creates an array
-                        }
+
+                        SerializableObjectArray ??= Array.CreateInstance(field.FieldType.GetElementType()!, 1); // creates an array
 
                         var AppendedArray = RuntimeArrayHelpers.AppendToRuntimeArray(SerializableObjectArray, endpointObject);
 
@@ -65,9 +61,9 @@ namespace ProtobufWebsocket.Protobuf_Helper
             return responseEndpoint!;
         }
 
-        private static object? createResponseEndpoint()
+        private static object? CreateResponseEndpoint()
         {
-            var responseType = EndpointsTypeProvider.getResponseInstance();
+            var responseType = EndpointsTypeProvider.GetResponseInstance();
             return Activator.CreateInstance(responseType);
         }
 

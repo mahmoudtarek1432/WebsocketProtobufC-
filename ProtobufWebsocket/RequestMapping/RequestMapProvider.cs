@@ -3,7 +3,7 @@
     internal class RequestMapProvider
     {
         
-        public static Dictionary<string, EndpointTypeProperties> _RequestMap { get; set; }
+        public static Dictionary<string, EndpointTypeProperties>? RequestMap { get; set; }
 
 
         /**
@@ -11,11 +11,9 @@
          */
         public static Dictionary<string, EndpointTypeProperties> GetRequestMap()
         {
-            if (_RequestMap == null)
-            {
-                _RequestMap = new Dictionary<string, EndpointTypeProperties>();
-            }
-            return _RequestMap;
+            RequestMap ??= new Dictionary<string, EndpointTypeProperties>();
+
+            return RequestMap;
         }
     }
 
@@ -23,8 +21,8 @@
     //and avoiding traversing the type each time it gets invoked
     internal class EndpointTypeProperties
     {
-        public Type EndpointType { get; set; }
+        public Type? EndpointType { get; set; }
 
-        public IEnumerable<Type> EndpointConstructorParams { get; set; }
+        public IEnumerable<Type>? EndpointConstructorParams { get; set; }
     }
 }
