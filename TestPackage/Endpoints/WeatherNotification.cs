@@ -17,7 +17,7 @@ namespace TestPackage.Endpoints
             {
                 Price = 20,
                 Name = "from notification",
-                resultCode = ResultCode.Success,
+                Result_code = ResultCode.Success,
             };
             return response;
         }

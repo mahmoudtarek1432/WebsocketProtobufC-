@@ -5,7 +5,7 @@ namespace ProtobufWebsocket.RequestMapping
 {
     internal class RequestMappingHelper
     {
-        public static void MapRequestToEndpoint(Type request, Type Endpoint)
+        public static void MapRequestResponseToEndpoint(Type request, Type Endpoint)
         {
 
             var requestClassName = request.Name;
@@ -21,14 +21,16 @@ namespace ProtobufWebsocket.RequestMapping
             map.Add(requestClassName, endpointProp);
         }
 
-        public static EndpointTypeProperties GetEndpoint(Type request)
+
+        //provides refrence to both request and response endpoints
+        public static EndpointTypeProperties GetEndpoint(Type EndpointDto)
         {
             
-            var requestClassName = request.Name;
+            var DtoClassName = EndpointDto.Name;
 
             var map = RequestMapProvider.GetRequestMap();
 
-            var endpoint = map[requestClassName];
+            var endpoint = map[DtoClassName];
 
             return endpoint;
         }

@@ -47,6 +47,9 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
 
                     var notificationObject = Activator.CreateInstance(x, constructorParamObjects) ?? throw new Exception($"notification handler creation yeilds null {nameof(SendNotification)}");
 
+                    //push user id
+                    //notificationObject = EndpointHelper.EndpointHelper.PassUserId(notificationObject!, "broadcast");
+
                     var Result = notificationObject.InvokeHandler();
                     var encode = ProtobufAccessHelper.Encode(Result);
                     foreach (var session in sessions)

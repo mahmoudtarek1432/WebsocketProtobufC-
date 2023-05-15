@@ -29,9 +29,11 @@ namespace ProtobufWebsocket.EndpointHelper
            foreach ( var handler in Handlers )
             {
                 var Requesttype = handler.BaseType!.GetGenericArguments().Where(A => A.BaseType!.Name == typeof(IRequest).Name).FirstOrDefault();
+                var Responsetype = handler.BaseType!.GetGenericArguments().Where(A => A.BaseType!.Name == typeof(IResponse).Name).FirstOrDefault();
                 if (Requesttype != null)
                 {
-                    RequestMappingHelper.MapRequestToEndpoint(Requesttype!, handler);      //maps an endpoint to a request
+                    RequestMappingHelper.MapRequestResponseToEndpoint(Requesttype!, handler);      //maps an endpoint to a request
+                    RequestMappingHelper.MapRequestResponseToEndpoint(Responsetype!, handler);      //maps an endpoint to a request
                     BroadcastDictionaryProvider.CreateNewDictionaryInstance(handler.Name); //intialize an endpoint dictionary
                 }
             }
@@ -130,6 +132,7 @@ namespace ProtobufWebsocket.EndpointHelper
 
         public static object Handle(object EndpointObject, object requestObject)
         {
+            //the handler can be handle or handleasync
              var handlerReturnObject = EndpointObject.InvokeHandler(requestObject); //returns a task<object>
             
             var invokeReturnType = AssemblyHelper.resolveTask(handlerReturnObject);

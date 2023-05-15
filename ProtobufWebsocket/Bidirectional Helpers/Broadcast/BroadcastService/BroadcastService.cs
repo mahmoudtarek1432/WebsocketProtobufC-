@@ -19,6 +19,7 @@ namespace ProtobufWebsocket.Broadcast_Helper
     internal class BroadcastService : IBroadcastService
     {
         //class gets triggered from user assembly so no need for reflection
+        //passes a request through the request response pipline
         public void EndpointBroadCast<Request>(Request request) where Request : IRequest
         {
 
@@ -46,6 +47,32 @@ namespace ProtobufWebsocket.Broadcast_Helper
             Task.Run(delegate { 
                     //potential problem with write requests
                     foreach (var userId in endpointusers)
+                {
+                    sessions[userId].Context.WebSocket.SendAsync(sentbytes, (b) => Console.Write("BroadCastSent"));
+                }
+            });
+        }
+
+        //sends resposne to clients directly
+        public void EndpointBroadCastByRequest<R>(R Resposne) where R : IResponse
+        {
+
+            var endpointProperties = RequestMappingHelper.GetEndpoint(Resposne.GetType());
+
+            //extracts an endpoint name and gets its users
+            var endpointusers = BroadcastDictionaryProvider.GetEndpointUsers(endpointProperties.EndpointType!.GetType().Name);
+
+            var responseEndpoint = ProtobufAccessHelper.FillEndpoint(Resposne, null); //second param to create a new endpoint
+
+            var sentbytes = ProtobufAccessHelper.Encode(responseEndpoint);
+
+            var sessions = SessionInstance.GetSessionManagerInstance();
+
+            //invoke handler
+
+            Task.Run(delegate {
+                //potential problem with write requests
+                foreach (var userId in endpointusers)
                 {
                     sessions[userId].Context.WebSocket.SendAsync(sentbytes, (b) => Console.Write("BroadCastSent"));
                 }

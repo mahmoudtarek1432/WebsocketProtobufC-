@@ -8,3 +8,10 @@ using ProtobufWebsocket.Services;
 using ProtobufWebsocket.TestServices;
 using System.Reflection;
 
+
+var host = Host.CreateDefaultBuilder().ConfigureServices(services =>
+{
+    services.AddProtoWebsocketService(Assembly.GetExecutingAssembly(), "ws://127.0.0.1/", "/test");
+});
+
+host.Build().Run();

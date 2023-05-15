@@ -19,7 +19,15 @@ namespace ProtobufWebsocket.Assembly_Helpers
          */
         public static object resolveTask(object Task)
         {
-            return Task.GetType().GetProperty("Result").GetValue(Task);
+            var resultProperty = Task.GetType().GetProperty("Result");
+            if (resultProperty == null) // not a task
+            {
+                return Task;
+            }
+            else
+            {
+                return resultProperty.GetValue(Task)!;
+            }
         }
     }
 }
