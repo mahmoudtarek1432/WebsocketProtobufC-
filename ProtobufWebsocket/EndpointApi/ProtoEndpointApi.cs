@@ -19,7 +19,7 @@ namespace ProtobufWebsocket.EndpointApi
     {
         public static byte[] ResolveRequest(byte[] incomingBytes, string userId)//service provider instance that is passed from the application builder context
         {
-            var requestEndpointType = EndpointsTypeProvider.getRequestInstance();
+            var requestEndpointType = EndpointsTypeProvider.GetRequestInstance();
 
             var RequestEndpointObject = ProtobufAccessHelper.Decode(requestEndpointType, incomingBytes); //class includes list of objects of extended type irequest
 
@@ -29,7 +29,7 @@ namespace ProtobufWebsocket.EndpointApi
                 return (E.request, EndpointHelper.EndpointHelper.PrepareEndpointObject(E.endpointProp));
             }).ToList();
 
-            byte[] encoded = null;
+            byte[]? encoded = null;
 
             foreach (var resolve in endpoints)
             {
@@ -48,29 +48,29 @@ namespace ProtobufWebsocket.EndpointApi
                     var endpointType = resolve.EndpointObject.GetType();
                     if(!BroadcastDictionaryProvider.AddUserToEndpoint(endpointType.Name, userId))
                     {
-                        ResponseObject = addRuntimeError(ResponseObject, new Error() { message = "The client is subscribed"});
+                        ResponseObject = AddRuntimeError(ResponseObject, new Error() { Message = "The client is subscribed"});
                     }
 
                 }
-                var responseEndpoint = ProtobufAccessHelper.fillEndpoint(ResponseObject, null); //second param to create a new endpoint
+                var responseEndpoint = ProtobufAccessHelper.FillEndpoint(ResponseObject, null); //second param to create a new endpoint
 
                 encoded=  ProtobufAccessHelper.Encode(responseEndpoint);
             }
 
-            return encoded;
+            return encoded!;
         }
 
-        public static object addRuntimeError(object ResponseObject,Error error)
+        public static object AddRuntimeError(object ResponseObject,Error error)
         {
             var errorsProperty = ResponseObject.GetType().GetProperty("Errors");
             var errorArrayValue = errorsProperty?.GetValue(ResponseObject);
             if(errorArrayValue == null)
             {
                 var type = ResponseObject.GetType().GetProperty("Errors")!.PropertyType.GetGenericArguments().FirstOrDefault();
-                errorArrayValue = Array.CreateInstance(type, 1);
+                errorArrayValue = Array.CreateInstance(type!, 1);
             }
             errorArrayValue = errorArrayValue.AppendStaticArray(error);
-            errorsProperty.SetValue(ResponseObject, errorArrayValue);
+            errorsProperty!.SetValue(ResponseObject, errorArrayValue);
             return ResponseObject;
         }
 

@@ -27,7 +27,7 @@ namespace ProtobufWebsocket.Assembly_Helpers
             var elementType = arrayType.GetElementType();                                                                               //used to Traverse inside the object
             var elementObject = Activator.CreateInstance(arrayType.GetElementType()!);
 
-            var filledElement = cloneObjectValue(elementObject!, ToGetAppended);  //object values got cloned
+            var filledElement = CloneObjectValue(elementObject!, ToGetAppended);  //object values got cloned
 
             //arrayType
             var AppendedArray = AppendObjectToRuntimeArray(array, filledElement);
@@ -37,7 +37,7 @@ namespace ProtobufWebsocket.Assembly_Helpers
 
         }
 
-        public static object cloneObjectValue(object emptyObj, object Origin)
+        public static object CloneObjectValue(object emptyObj, object Origin)
         {
             var elementType = emptyObj.GetType();
             var test = elementType.GetProperties();
@@ -46,12 +46,12 @@ namespace ProtobufWebsocket.Assembly_Helpers
                 var isArray = e.FieldType.IsArray;
                 if (isArray)
                 {
-                    var RuntimeArr = (object) Array.CreateInstance(e.FieldType.GetElementType(), 1);
-                    var OriginArray = Origin.GetType().GetProperty(e.Name).GetValue(Origin);
+                    var RuntimeArr = (object) Array.CreateInstance(e.FieldType.GetElementType()!, 1);
+                    var OriginArray = Origin.GetType().GetProperty(e.Name)!.GetValue(Origin);
                     if (OriginArray != null)
                     {
 
-                        loopRuntimeArray(OriginArray, (element) =>
+                        LoopRuntimeArray(OriginArray, (element) =>
                         {
                             RuntimeArr = AppendToRuntimeArray(RuntimeArr, element);
                         });
@@ -60,7 +60,7 @@ namespace ProtobufWebsocket.Assembly_Helpers
                 }
                 else
                 {
-                    e.SetValue(emptyObj, Origin.GetType().GetProperty(e.Name).GetValue(Origin)); //searches the to be cloned object for field name and sets the element value
+                    e.SetValue(emptyObj, Origin.GetType().GetProperty(e.Name)!.GetValue(Origin)); //searches the to be cloned object for field name and sets the element value
 
                 }
             });
@@ -68,17 +68,16 @@ namespace ProtobufWebsocket.Assembly_Helpers
             return emptyObj;
         }
 
-        public static int GetRuntimeArrayLength(object Array)
+        public static int GetRuntimeArrayLength(object array)
         {
-            if (!Array.GetType().IsArray)
+            if (!array.GetType().IsArray)
                 throw new Exception($"The passed is object is not an instance of Type Array {nameof(GetRuntimeArrayLength)}");
 
-            var LengthMember = Array.GetType().GetMember("Length");
-            var methodAccessor = LengthMember.GetType().GetMethod("get_Length");
-            if (methodAccessor == null)
-                throw new Exception($"method is implemented in Type {LengthMember} at {nameof(GetRuntimeArrayLength)}");
+            var LengthMember = array.GetType().GetMember("Length");
 
-            var length = (int)methodAccessor.Invoke(Array, new object[] { })!; //function int32 get_Length();
+            var methodAccessor = LengthMember.GetType().GetMethod("get_Length") ?? throw new Exception($"method is implemented in Type {LengthMember} at {nameof(GetRuntimeArrayLength)}");
+
+            var length = (int)methodAccessor.Invoke(array, Array.Empty<object>())!; //function int32 get_Length();
             return length;
         }
 
@@ -96,9 +95,9 @@ namespace ProtobufWebsocket.Assembly_Helpers
             int index;
             for (index = 0; index < length; index++)
             {
-                if (ArrayGetMethod.Invoke(Array, new object[] { index }) == null)  //the array index is null
+                if (ArrayGetMethod!.Invoke(Array, new object[] { index }) == null)  //the array index is null
                 {
-                    ArraySetMethod.Invoke(Array, new object[] { index, element });
+                    ArraySetMethod!.Invoke(Array, new object[] { index, element });
 
                     return Array; //object with element added
                 }
@@ -106,17 +105,17 @@ namespace ProtobufWebsocket.Assembly_Helpers
 
             //completed loop signifies that the array's slots are all full
 
-            var extendedArray = extendRuntimeArray(Array); // array is cloned and size is doubled
+            var extendedArray = ExtendRuntimeArray(Array); // array is cloned and size is doubled
 
             return AppendObjectToRuntimeArray(extendedArray, element);
         }
 
         //called in case of a full runtimeArray Object, clones the array and returns an extended array (doubles the length)
-        public static object extendRuntimeArray(object FromArray)
+        public static object ExtendRuntimeArray(object FromArray)
         {
             var isarray = FromArray.GetType();
             if (!FromArray.GetType().IsArray)
-                throw new Exception($"Passed object is not an array {nameof(extendRuntimeArray)}");
+                throw new Exception($"Passed object is not an array {nameof(ExtendRuntimeArray)}");
 
             var initialLength = GetRuntimeArrayLength(FromArray);
             var NewLength = initialLength * 2; //doubles the initial size
@@ -136,10 +135,10 @@ namespace ProtobufWebsocket.Assembly_Helpers
             return createdArray;
         }
 
-        public static void loopRuntimeArray(object Array, Action<object> process)
+        public static void LoopRuntimeArray(object Array, Action<object> process)
         {
             if (!Array.GetType().IsArray)
-                throw new Exception($"Passed object is not an array {nameof(extendRuntimeArray)}");
+                throw new Exception($"Passed object is not an array {nameof(LoopRuntimeArray)}");
 
             var initialLength = GetRuntimeArrayLength(Array);
             var elementType = Array.GetType().GetElementType();
@@ -150,14 +149,14 @@ namespace ProtobufWebsocket.Assembly_Helpers
             for (int index = 0; index < initialLength; index++)
             {
                 var Element = ArrayGetMethod!.Invoke(Array, new object[] { index });
-                process(Element);
+                process(Element!);
             }
         }
 
-        public static void loopRuntimeArray(object Array, Action<object,int> process)
+        public static void LoopRuntimeArray(object Array, Action<object,int> process)
         {
             if (!Array.GetType().IsArray)
-                throw new Exception($"Passed object is not an array {nameof(extendRuntimeArray)}");
+                throw new Exception($"Passed object is not an array {nameof(LoopRuntimeArray)}");
 
             var initialLength = GetRuntimeArrayLength(Array);
             var elementType = Array.GetType().GetElementType();
@@ -168,7 +167,7 @@ namespace ProtobufWebsocket.Assembly_Helpers
             for (int index = 0; index < initialLength; index++)
             {
                 var Element = ArrayGetMethod!.Invoke(Array, new object[] { index });
-                process(Element,index);
+                process(Element!,index);
             }
         }
     }

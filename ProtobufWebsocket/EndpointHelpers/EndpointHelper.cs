@@ -28,14 +28,15 @@ namespace ProtobufWebsocket.EndpointHelper
 
            foreach ( var handler in Handlers )
             {
-                var Requesttype = handler.BaseType!.GetGenericArguments().Where(A => A.BaseType.Name == typeof(IRequest).Name).FirstOrDefault();
+                var Requesttype = handler.BaseType!.GetGenericArguments().Where(A => A.BaseType!.Name == typeof(IRequest).Name).FirstOrDefault();
+                var Responsetype = handler.BaseType!.GetGenericArguments().Where(A => A.BaseType!.Name == typeof(IResponse).Name).FirstOrDefault();
                 if (Requesttype != null)
                 {
-                    RequestMappingHelper.MapRequestToEndpoint(Requesttype!, handler);      //maps an endpoint to a request
+                    RequestMappingHelper.MapRequestResponseToEndpoint(Requesttype!, handler);      //maps an endpoint to a request
+                    RequestMappingHelper.MapRequestResponseToEndpoint(Responsetype!, handler);      //maps an endpoint to a request
                     BroadcastDictionaryProvider.CreateNewDictionaryInstance(handler.Name); //intialize an endpoint dictionary
                 }
             }
-
             EndpointsHandleProvider.CreateEndpointHandlerSingleton(Handlers.ToList()); //endpoints saved
         }
 
@@ -52,7 +53,7 @@ namespace ProtobufWebsocket.EndpointHelper
                     if (fieldArr != null)
                     {
                         
-                        RuntimeArrayHelpers.loopRuntimeArray(fieldArr!, (element) =>
+                        RuntimeArrayHelpers.LoopRuntimeArray(fieldArr!, (element) =>
                         {
                             //get the Request's coresponding endpoint
                             EndpointList.Add((element, RequestMappingHelper.GetEndpoint(element.GetType())));
@@ -70,7 +71,7 @@ namespace ProtobufWebsocket.EndpointHelper
             //an array of objects is constructed using dependency injection
             var constructorObjects = new List<object>();
 
-            foreach(var param in endpoint.EndpointConstructorParams)
+            foreach(var param in endpoint.EndpointConstructorParams!)
             {
                 var IntializedParam = DependencyInjectionHelper.IntializeWithDI(param);
                 constructorObjects.Add(IntializedParam);
@@ -78,7 +79,7 @@ namespace ProtobufWebsocket.EndpointHelper
 
             var endpointType = endpoint.EndpointType;
 
-            object endpointInstance = Activator.CreateInstance(endpointType, constructorObjects.ToArray())!; //might have issues with object placment
+            object endpointInstance = Activator.CreateInstance(endpointType!, constructorObjects.ToArray())!; //might have issues with object placment
 
             return endpointInstance;
 
@@ -93,7 +94,7 @@ namespace ProtobufWebsocket.EndpointHelper
 
             foreach (var field in staticTypeInstance.GetType().GetProperties())
             {
-                var runtimeFieldValue = runtimeObject.GetType().GetField(field.Name).GetValue(runtimeObject);
+                var runtimeFieldValue = runtimeObject.GetType().GetField(field.Name)!.GetValue(runtimeObject);
                 field.SetValue(staticTypeInstance, runtimeFieldValue);
             }
             return staticTypeInstance;
@@ -112,10 +113,8 @@ namespace ProtobufWebsocket.EndpointHelper
         public static object PassUserId(object endpoint, string UserId)
         {
             var endpointType = endpoint.GetType();
-            var field = endpointType.GetField("UserId");
 
-            if (field == null)
-                throw new Exception($"field userGUID is not present in {endpointType.FullName}");
+            var field = endpointType.GetField("UserId") ?? throw new Exception($"field userGUID is not present in {endpointType.FullName}");
 
             field.SetValue(endpoint, UserId);
 
@@ -124,22 +123,23 @@ namespace ProtobufWebsocket.EndpointHelper
 
         public static object PassResponseTheRequestId(object Request, object Response)
         {
-            var requestId = Request.GetType().GetRuntimeField("request_id").GetValue(Request);
+            var requestId = Request.GetType().GetRuntimeField("request_id")!.GetValue(Request);
 
-            Response.GetType().GetProperty("request_id").SetValue(Response, requestId);
+            Response.GetType().GetProperty("request_id")!.SetValue(Response, requestId);
 
             return Response;
         }
 
         public static object Handle(object EndpointObject, object requestObject)
         {
+            //the handler can be handle or handleasync
              var handlerReturnObject = EndpointObject.InvokeHandler(requestObject); //returns a task<object>
             
             var invokeReturnType = AssemblyHelper.resolveTask(handlerReturnObject);
             return invokeReturnType;
         }
 
-        public static (Type, string) identifyEndpoint(Type type)
+        public static (Type, string) IdentifyEndpoint(Type type)
         {
 
             var Reqatt = type.GetCustomAttributes().Where(A =>

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProtobufWebsocket", "ProtobufWebsocket\ProtobufWebsocket.csproj", "{E1CC4E10-84EB-4A41-AD7B-5DCF08971413}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPackage", "TestPackage\TestPackage.csproj", "{8A543EF2-1B4B-441A-9005-D7E03F1D3B91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPackage", "TestPackage\TestPackage.csproj", "{8A543EF2-1B4B-441A-9005-D7E03F1D3B91}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

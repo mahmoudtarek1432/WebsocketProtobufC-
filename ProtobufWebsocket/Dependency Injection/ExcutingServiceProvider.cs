@@ -8,18 +8,18 @@ namespace ProtobufWebsocket.Dependency_Injection
 {
     internal class ExcutingServiceProvider
     {
-        private static IServiceProvider _instance { get; set; }
+        private static IServiceProvider? Instance { get; set; }
 
         public static IServiceProvider GetInstance() {
-            if (_instance == null)
+            if (Instance == null)
                 throw new NullReferenceException("Services are not provided yet.");
-            return _instance; 
+            return Instance; 
         
         }
 
         public static void CreateInstance(IServiceProvider instance)
         {
-            _instance = instance;
+            Instance = instance;
         }
 
     }

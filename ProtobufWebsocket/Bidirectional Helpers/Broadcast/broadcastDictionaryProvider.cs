@@ -9,7 +9,7 @@ namespace ProtobufWebsocket.Broadcast_Helper
 {
     internal class BroadcastDictionaryProvider
     {
-        private static Dictionary<string, List<string>> _dictionary; //key is the endpoint's name and the list contains the websockets subscribed on broadcast
+        private static Dictionary<string, List<string>>? _dictionary; //key is the endpoint's name and the list contains the websockets subscribed on broadcast
 
         public static void CreateNewDictionaryInstance(string key)
         {
@@ -27,7 +27,7 @@ namespace ProtobufWebsocket.Broadcast_Helper
          */
         public static bool AddUserToEndpoint(string endpointKey, string UserGuid)
         {
-            if (!_dictionary[endpointKey].Contains(UserGuid)) //user is not subscribed
+            if (!_dictionary![endpointKey].Contains(UserGuid)) //user is not subscribed
             {
                 _dictionary[endpointKey].Add(UserGuid);
                 return true;
@@ -37,7 +37,7 @@ namespace ProtobufWebsocket.Broadcast_Helper
 
         public static List<string> GetEndpointUsers(string endpointKey)
         {
-            _dictionary.TryGetValue(endpointKey, out var list);
+            _dictionary!.TryGetValue(endpointKey, out var list);
             if (list == null)
                 throw new Exception("endpoint is not created");
             return list;
@@ -45,7 +45,7 @@ namespace ProtobufWebsocket.Broadcast_Helper
 
         public static void RemoveUserfromEndpoint(string endpointKey, string UserGuid)
         {
-            _dictionary[endpointKey].Remove(UserGuid);
+            _dictionary![endpointKey].Remove(UserGuid);
         }
     }
 }

@@ -22,12 +22,12 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
         public void SendNotification<T>() where T : INotificationEndpoint
         {
         
-            var sessionManager = SessionInstance.getSessionManagerInstance();
+            var sessionManager = SessionInstance.GetSessionManagerInstance();
 
             var notificationObject = CreateNotificationObject(typeof(T));
             var task = notificationObject.InvokeHandler() ;
             var resolvedResponse = AssemblyHelper.resolveTask(task);
-            var endpoint = ProtobufAccessHelper.fillEndpoint(resolvedResponse);
+            var endpoint = ProtobufAccessHelper.FillEndpoint(resolvedResponse);
             var encode = ProtobufAccessHelper.Encode(endpoint);
 
             sessionManager.BroadcastAsync(encode, () => Console.WriteLine(""));
@@ -44,9 +44,11 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
 
                     var constructorParamTypes = x.RetriveConstructorParameters();
                     var constructorParamObjects = constructorParamTypes.Select(T => DependencyInjectionHelper.IntializeWithDI(T));
-                    var notificationObject = Activator.CreateInstance(x, constructorParamObjects);
-                    if (notificationObject == null)
-                        throw new Exception($"notification handler creation yeilds null {nameof(SendNotification)}");
+
+                    var notificationObject = Activator.CreateInstance(x, constructorParamObjects) ?? throw new Exception($"notification handler creation yeilds null {nameof(SendNotification)}");
+
+                    //push user id
+                    //notificationObject = EndpointHelper.EndpointHelper.PassUserId(notificationObject!, "broadcast");
 
                     var Result = notificationObject.InvokeHandler();
                     var encode = ProtobufAccessHelper.Encode(Result);
@@ -57,9 +59,9 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
                 });
         }
 
-        private static IEnumerable<IWebSocketSession> GetSessionList(IEnumerable<string> Ids = null)
+        private static IEnumerable<IWebSocketSession> GetSessionList(IEnumerable<string>? Ids = null)
         {
-            var sessions = SessionInstance.getSessionManagerInstance();
+            var sessions = SessionInstance.GetSessionManagerInstance();
             var filtered = new List<IWebSocketSession>();
             if(Ids != null)
             {
@@ -78,9 +80,9 @@ namespace ProtobufWebsocket.Bidirectional_Helpers.Notification.Notification_Serv
             IEnumerable<Type> constructorParamTypes = type.RetriveConstructorParameters() as IEnumerable<Type>;
             object notificationObject;
             
-            if(constructorParamTypes.Count() != 0)
+            if(constructorParamTypes.Any())
             {
-                var constructorParamObjects = constructorParamTypes.Select(T => DependencyInjectionHelper.IntializeWithDI(T));
+                var constructorParamObjects = constructorParamTypes.Select(T => DependencyInjectionHelper.IntializeWithDI(T)).ToArray();
                 notificationObject = Activator.CreateInstance(type, constructorParamObjects)!;
             }
             else

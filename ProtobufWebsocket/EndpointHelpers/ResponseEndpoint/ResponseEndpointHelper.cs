@@ -13,7 +13,7 @@ namespace ProtobufWebsocket.EndpointHelper.ResponseEndpoint
         private static object CreateResponseEndpoint()
         {
 
-            var requestEndpointType = EndpointsTypeProvider.getResponseInstance();
+            var requestEndpointType = EndpointsTypeProvider.GetResponseInstance();
 
             var ResponseEndpointObject = Activator.CreateInstance(requestEndpointType);
 
